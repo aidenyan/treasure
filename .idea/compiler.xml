@@ -6,11 +6,18 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="treasure" />
+        <module name="treasure-api" />
+        <module name="treasure-common" />
+        <module name="treasure-dao" />
+        <module name="treasure-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="treasure" target="1.5" />
+      <module name="treasure-api" target="1.5" />
+      <module name="treasure-common" target="1.5" />
+      <module name="treasure-dao" target="1.5" />
+      <module name="treasure-service" target="1.5" />
     </bytecodeTargetLevel>
   </component>
 </project>

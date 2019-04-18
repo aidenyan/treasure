@@ -3,6 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/treasure.iml" filepath="$PROJECT_DIR$/treasure.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treasure-api/treasure-api.iml" filepath="$PROJECT_DIR$/treasure-api/treasure-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treasure-common/treasure-common.iml" filepath="$PROJECT_DIR$/treasure-common/treasure-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treasure-dao/treasure-dao.iml" filepath="$PROJECT_DIR$/treasure-dao/treasure-dao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/treasure-service/treasure-service.iml" filepath="$PROJECT_DIR$/treasure-service/treasure-service.iml" />
     </modules>
   </component>
 </project>
