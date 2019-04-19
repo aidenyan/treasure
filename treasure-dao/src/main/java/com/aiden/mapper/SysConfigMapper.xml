@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aiden.mapper.SysConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.aiden.entity.SysConfig" >
+    <id column="ID" property="id" jdbcType="BIGINT" />
+    <result column="treasure_total_amount" property="treasureTotalAmount" jdbcType="DECIMAL" />
+    <result column="treasure_end_time" property="treasureEndTime" jdbcType="TIMESTAMP" />
+    <result column="treasure_hight_num" property="treasureHightNum" jdbcType="INTEGER" />
+    <result column="treasure_low_num" property="treasureLowNum" jdbcType="INTEGER" />
+    <result column="treasure_enabled" property="treasureEnabled" jdbcType="INTEGER" />
+    <result column="sms_content" property="smsContent" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    ID, treasure_total_amount, treasure_end_time, treasure_hight_num, treasure_low_num,
+    treasure_enabled, sms_content
+  </sql>
+  <select id="findOne" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from t_sys_config
+    ORDER BY id desc limit 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_sys_config
+    where ID = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aiden.entity.SysConfig" >
+    insert into t_sys_config (ID, treasure_total_amount, treasure_end_time,
+      treasure_hight_num, treasure_low_num, treasure_enabled,
+      sms_content)
+    values (#{id,jdbcType=BIGINT}, #{treasureTotalAmount,jdbcType=DECIMAL}, #{treasureEndTime,jdbcType=TIMESTAMP},
+      #{treasureHightNum,jdbcType=INTEGER}, #{treasureLowNum,jdbcType=INTEGER}, #{treasureEnabled,jdbcType=INTEGER},
+      #{smsContent,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aiden.entity.SysConfig" >
+    insert into t_sys_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        ID,
+      </if>
+      <if test="treasureTotalAmount != null" >
+        treasure_total_amount,
+      </if>
+      <if test="treasureEndTime != null" >
+        treasure_end_time,
+      </if>
+      <if test="treasureHightNum != null" >
+        treasure_hight_num,
+      </if>
+      <if test="treasureLowNum != null" >
+        treasure_low_num,
+      </if>
+      <if test="treasureEnabled != null" >
+        treasure_enabled,
+      </if>
+      <if test="smsContent != null" >
+        sms_content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="treasureTotalAmount != null" >
+        #{treasureTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="treasureEndTime != null" >
+        #{treasureEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="treasureHightNum != null" >
+        #{treasureHightNum,jdbcType=INTEGER},
+      </if>
+      <if test="treasureLowNum != null" >
+        #{treasureLowNum,jdbcType=INTEGER},
+      </if>
+      <if test="treasureEnabled != null" >
+        #{treasureEnabled,jdbcType=INTEGER},
+      </if>
+      <if test="smsContent != null" >
+        #{smsContent,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aiden.entity.SysConfig" >
+    update t_sys_config
+    <set >
+      <if test="treasureTotalAmount != null" >
+        treasure_total_amount = #{treasureTotalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="treasureEndTime != null" >
+        treasure_end_time = #{treasureEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="treasureHightNum != null" >
+        treasure_hight_num = #{treasureHightNum,jdbcType=INTEGER},
+      </if>
+      <if test="treasureLowNum != null" >
+        treasure_low_num = #{treasureLowNum,jdbcType=INTEGER},
+      </if>
+      <if test="treasureEnabled != null" >
+        treasure_enabled = #{treasureEnabled,jdbcType=INTEGER},
+      </if>
+      <if test="smsContent != null" >
+        sms_content = #{smsContent,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aiden.entity.SysConfig" >
+    update t_sys_config
+    set treasure_total_amount = #{treasureTotalAmount,jdbcType=DECIMAL},
+      treasure_end_time = #{treasureEndTime,jdbcType=TIMESTAMP},
+      treasure_hight_num = #{treasureHightNum,jdbcType=INTEGER},
+      treasure_low_num = #{treasureLowNum,jdbcType=INTEGER},
+      treasure_enabled = #{treasureEnabled,jdbcType=INTEGER},
+      sms_content = #{smsContent,jdbcType=VARCHAR}
+    where ID = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

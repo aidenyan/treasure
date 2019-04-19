@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aiden.mapper.TreasureInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.aiden.entity.TreasureInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="treasure_name" property="treasureName" jdbcType="VARCHAR" />
+    <result column="level" property="level" jdbcType="TINYINT" />
+    <result column="range" property="range" jdbcType="DECIMAL" />
+    <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="content" property="content" jdbcType="VARCHAR" />
+    <result column="amount" property="amount" jdbcType="DECIMAL" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="probability" property="probability" jdbcType="DECIMAL" />
+    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
+    <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, treasure_name, level, range, type, content, amount, end_time, probability, total_amount, 
+    already_amount
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_treasure_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_treasure_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.aiden.entity.TreasureInfo" >
+    insert into t_treasure_info (id, treasure_name, level, 
+      range, type, content, 
+      amount, end_time, probability, 
+      total_amount, already_amount)
+    values (#{id,jdbcType=BIGINT}, #{treasureName,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
+      #{range,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR}, 
+      #{amount,jdbcType=DECIMAL}, #{endTime,jdbcType=TIMESTAMP}, #{probability,jdbcType=DECIMAL}, 
+      #{totalAmount,jdbcType=DECIMAL}, #{alreadyAmount,jdbcType=DECIMAL})
+  </insert>
+  <insert id="insertSelective" parameterType="com.aiden.entity.TreasureInfo" >
+    insert into t_treasure_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="treasureName != null" >
+        treasure_name,
+      </if>
+      <if test="level != null" >
+        level,
+      </if>
+      <if test="range != null" >
+        range,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+      <if test="amount != null" >
+        amount,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="probability != null" >
+        probability,
+      </if>
+      <if test="totalAmount != null" >
+        total_amount,
+      </if>
+      <if test="alreadyAmount != null" >
+        already_amount,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="treasureName != null" >
+        #{treasureName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=TINYINT},
+      </if>
+      <if test="range != null" >
+        #{range,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="probability != null" >
+        #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyAmount != null" >
+        #{alreadyAmount,jdbcType=DECIMAL},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.aiden.entity.TreasureInfo" >
+    update t_treasure_info
+    <set >
+      <if test="treasureName != null" >
+        treasure_name = #{treasureName,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null" >
+        level = #{level,jdbcType=TINYINT},
+      </if>
+      <if test="range != null" >
+        range = #{range,jdbcType=DECIMAL},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=TINYINT},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="amount != null" >
+        amount = #{amount,jdbcType=DECIMAL},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="probability != null" >
+        probability = #{probability,jdbcType=DECIMAL},
+      </if>
+      <if test="totalAmount != null" >
+        total_amount = #{totalAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="alreadyAmount != null" >
+        already_amount = #{alreadyAmount,jdbcType=DECIMAL},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.aiden.entity.TreasureInfo" >
+    update t_treasure_info
+    set treasure_name = #{treasureName,jdbcType=VARCHAR},
+      level = #{level,jdbcType=TINYINT},
+      range = #{range,jdbcType=DECIMAL},
+      type = #{type,jdbcType=TINYINT},
+      content = #{content,jdbcType=VARCHAR},
+      amount = #{amount,jdbcType=DECIMAL},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      probability = #{probability,jdbcType=DECIMAL},
+      total_amount = #{totalAmount,jdbcType=DECIMAL},
+      already_amount = #{alreadyAmount,jdbcType=DECIMAL}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

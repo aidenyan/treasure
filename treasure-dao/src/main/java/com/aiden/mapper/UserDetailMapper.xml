@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aiden.mapper.UserDetailMapper" >
+  <resultMap id="BaseResultMap" type="com.aiden.entity.UserDetail" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="sex" property="sex" jdbcType="TINYINT" />
+    <result column="user_id" property="userId" jdbcType="BIGINT" />
+    <result column="birth_day" property="birthDay" jdbcType="DATE" />
+    <result column="introduce" property="introduce" jdbcType="VARCHAR" />
+    <result column="header_url" property="headerUrl" jdbcType="VARCHAR" />
+    <result column="has_certification" property="hasCertification" jdbcType="TINYINT" />
+    <result column="identification_card" property="identificationCard" jdbcType="VARCHAR" />
+    <result column="front_id_card_url" property="frontIdCardUrl" jdbcType="VARCHAR" />
+    <result column="reverse_id_card_url" property="reverseIdCardUrl" jdbcType="VARCHAR" />
+    <result column="invitation_code" property="invitationCode" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, sex, birth_day, introduce, header_url, has_certification, identification_card, 
+    front_id_card_url, reverse_id_card_url, invitation_code,user_id
+  </sql>
+  <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_user_detail
+    where user_id = #{userId}
+  </select>
+
+  <select id="countByCode" resultType="java.lang.Integer" >
+    select
+    count(id)
+     from t_user_detail
+    where invitation_code = #{invitationCode}
+  </select>
+
+  <insert id="insert" parameterType="com.aiden.entity.UserDetail" >
+    insert into t_user_detail
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="birthDay != null" >
+        birth_day,
+      </if>
+      <if test="introduce != null" >
+        introduce,
+      </if>
+      <if test="headerUrl != null" >
+        header_url,
+      </if>
+      <if test="hasCertification != null" >
+        has_certification,
+      </if>
+      <if test="identificationCard != null" >
+        identification_card,
+      </if>
+      <if test="frontIdCardUrl != null" >
+        front_id_card_url,
+      </if>
+      <if test="reverseIdCardUrl != null" >
+        reverse_id_card_url,
+      </if>
+      <if test="invitationCode != null" >
+        Invitation_code,
+      </if>
+      <if test=" userId != null">
+        user_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthDay != null" >
+        #{birthDay,jdbcType=DATE},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="headerUrl != null" >
+        #{headerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hasCertification != null" >
+        #{hasCertification,jdbcType=TINYINT},
+      </if>
+      <if test="identificationCard != null" >
+        #{identificationCard,jdbcType=VARCHAR},
+      </if>
+      <if test="frontIdCardUrl != null" >
+        #{frontIdCardUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="reverseIdCardUrl != null" >
+        #{reverseIdCardUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="invitationCode != null" >
+        #{invitationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="update" parameterType="com.aiden.entity.UserDetail" >
+    update t_user_detail
+    <set >
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=TINYINT},
+      </if>
+      <if test="birthDay != null" >
+        birth_day = #{birthDay,jdbcType=DATE},
+      </if>
+      <if test="introduce != null" >
+        introduce = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="headerUrl != null" >
+        header_url = #{headerUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="hasCertification != null" >
+        has_certification = #{hasCertification,jdbcType=TINYINT},
+      </if>
+      <if test="identificationCard != null" >
+        identification_card = #{identificationCard,jdbcType=VARCHAR},
+      </if>
+      <if test="frontIdCardUrl != null" >
+        front_id_card_url = #{frontIdCardUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="reverseIdCardUrl != null" >
+        reverse_id_card_url = #{reverseIdCardUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="invitationCode != null" >
+        Invitation_code = #{invitationCode,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
