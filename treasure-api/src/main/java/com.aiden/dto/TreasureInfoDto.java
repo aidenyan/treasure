@@ -1,39 +1,35 @@
-package com.aiden.entity;
+package com.aiden.dto;
 
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class TreasureInfo {
-    private Long id;
-
+@ApiModel("宝藏基本信息")
+public class TreasureInfoDto {
+    @ApiModelProperty("宝藏名称")
     private String treasureName;
-
+    @ApiModelProperty(value = "宝藏等级，0:表示低，1：表示高")
     private Integer level;
-
+    @ApiModelProperty("宝藏范围单位米")
     private BigDecimal distance;
-
+    @ApiModelProperty("1-红包，2-文字，3-语音，4-视频")
     private Integer type;
-
+    @ApiModelProperty("非红包情况下的内容")
     private String content;
-
+    @ApiModelProperty("红包金额")
     private BigDecimal amount;
-
+    @ApiModelProperty("结束时间")
     private Date endTime;
-
+    @ApiModelProperty("中奖的概率，百分制")
     private BigDecimal probability;
-
+    @ApiModelProperty("总的金额")
     private BigDecimal totalAmount;
 
-    private BigDecimal alreadyAmount;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
+    @NotBlank
     public String getTreasureName() {
         return treasureName;
     }
@@ -41,7 +37,7 @@ public class TreasureInfo {
     public void setTreasureName(String treasureName) {
         this.treasureName = treasureName == null ? null : treasureName.trim();
     }
-
+    @NotNull
     public Integer getLevel() {
         return level;
     }
@@ -49,7 +45,7 @@ public class TreasureInfo {
     public void setLevel(Integer level) {
         this.level = level;
     }
-
+    @NotNull
     public BigDecimal getDistance() {
         return distance;
     }
@@ -58,6 +54,9 @@ public class TreasureInfo {
         this.distance = distance;
     }
 
+
+
+    @NotNull
     public Integer getType() {
         return type;
     }
@@ -81,7 +80,7 @@ public class TreasureInfo {
     public void setAmount(BigDecimal amount) {
         this.amount = amount;
     }
-
+    @NotNull
     public Date getEndTime() {
         return endTime;
     }
@@ -89,7 +88,7 @@ public class TreasureInfo {
     public void setEndTime(Date endTime) {
         this.endTime = endTime;
     }
-
+    @NotNull
     public BigDecimal getProbability() {
         return probability;
     }
@@ -97,7 +96,7 @@ public class TreasureInfo {
     public void setProbability(BigDecimal probability) {
         this.probability = probability;
     }
-
+    @NotNull
     public BigDecimal getTotalAmount() {
         return totalAmount;
     }
@@ -106,11 +105,4 @@ public class TreasureInfo {
         this.totalAmount = totalAmount;
     }
 
-    public BigDecimal getAlreadyAmount() {
-        return alreadyAmount;
-    }
-
-    public void setAlreadyAmount(BigDecimal alreadyAmount) {
-        this.alreadyAmount = alreadyAmount;
-    }
 }

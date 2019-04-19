@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="treasure_name" property="treasureName" jdbcType="VARCHAR" />
     <result column="level" property="level" jdbcType="TINYINT" />
-    <result column="range" property="range" jdbcType="DECIMAL" />
+    <result column="distance" property="distance" jdbcType="DECIMAL" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="content" property="content" jdbcType="VARCHAR" />
     <result column="amount" property="amount" jdbcType="DECIMAL" />
@@ -15,7 +15,7 @@
     <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, treasure_name, level, range, type, content, amount, end_time, probability, total_amount, 
+    id, treasure_name, level, distance, type, content, amount, end_time, probability, total_amount,
     already_amount
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -24,21 +24,9 @@
     from t_treasure_info
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from t_treasure_info
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
+
   <insert id="insert" parameterType="com.aiden.entity.TreasureInfo" >
-    insert into t_treasure_info (id, treasure_name, level, 
-      range, type, content, 
-      amount, end_time, probability, 
-      total_amount, already_amount)
-    values (#{id,jdbcType=BIGINT}, #{treasureName,jdbcType=VARCHAR}, #{level,jdbcType=TINYINT}, 
-      #{range,jdbcType=DECIMAL}, #{type,jdbcType=TINYINT}, #{content,jdbcType=VARCHAR}, 
-      #{amount,jdbcType=DECIMAL}, #{endTime,jdbcType=TIMESTAMP}, #{probability,jdbcType=DECIMAL}, 
-      #{totalAmount,jdbcType=DECIMAL}, #{alreadyAmount,jdbcType=DECIMAL})
-  </insert>
-  <insert id="insertSelective" parameterType="com.aiden.entity.TreasureInfo" >
     insert into t_treasure_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -50,8 +38,8 @@
       <if test="level != null" >
         level,
       </if>
-      <if test="range != null" >
-        range,
+      <if test="distance != null" >
+        distance,
       </if>
       <if test="type != null" >
         type,
@@ -77,41 +65,41 @@
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
-        #{id,jdbcType=BIGINT},
+        #{id},
       </if>
       <if test="treasureName != null" >
-        #{treasureName,jdbcType=VARCHAR},
+        #{treasureName},
+      </if>
+      <if test="distance != null" >
+        #{distance},
       </if>
       <if test="level != null" >
-        #{level,jdbcType=TINYINT},
-      </if>
-      <if test="range != null" >
-        #{range,jdbcType=DECIMAL},
+        #{level},
       </if>
       <if test="type != null" >
-        #{type,jdbcType=TINYINT},
+        #{type},
       </if>
       <if test="content != null" >
-        #{content,jdbcType=VARCHAR},
+        #{content},
       </if>
       <if test="amount != null" >
-        #{amount,jdbcType=DECIMAL},
+        #{amount},
       </if>
       <if test="endTime != null" >
-        #{endTime,jdbcType=TIMESTAMP},
+        #{endTime},
       </if>
       <if test="probability != null" >
-        #{probability,jdbcType=DECIMAL},
+        #{probability},
       </if>
       <if test="totalAmount != null" >
-        #{totalAmount,jdbcType=DECIMAL},
+        #{totalAmount},
       </if>
       <if test="alreadyAmount != null" >
-        #{alreadyAmount,jdbcType=DECIMAL},
+        #{alreadyAmount},
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.aiden.entity.TreasureInfo" >
+  <update id="update" parameterType="com.aiden.entity.TreasureInfo" >
     update t_treasure_info
     <set >
       <if test="treasureName != null" >
@@ -120,8 +108,8 @@
       <if test="level != null" >
         level = #{level,jdbcType=TINYINT},
       </if>
-      <if test="range != null" >
-        range = #{range,jdbcType=DECIMAL},
+      <if test="distance != null" >
+        distance = #{distance,jdbcType=DECIMAL},
       </if>
       <if test="type != null" >
         type = #{type,jdbcType=TINYINT},
@@ -151,7 +139,7 @@
     update t_treasure_info
     set treasure_name = #{treasureName,jdbcType=VARCHAR},
       level = #{level,jdbcType=TINYINT},
-      range = #{range,jdbcType=DECIMAL},
+      distance = #{distance,jdbcType=DECIMAL},
       type = #{type,jdbcType=TINYINT},
       content = #{content,jdbcType=VARCHAR},
       amount = #{amount,jdbcType=DECIMAL},

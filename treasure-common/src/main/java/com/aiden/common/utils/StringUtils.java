@@ -28,5 +28,7 @@ public class StringUtils {
         return result.toString().toLowerCase();
     }
 
-
+   public static void main(String[]arg){
+        System.out.println(random(32));
+   }
 }
