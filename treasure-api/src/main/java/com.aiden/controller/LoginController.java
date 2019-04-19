@@ -34,8 +34,8 @@ import java.util.UUID;
 
 @Controller("/login")
 @Api(value = "login", tags = "loginController", description = "登录信息")
-public class LoginController {
-    private final static String key = "login.aiden.yanyifei.com.md5";
+public class LoginController extends BaseController{
+
     @Autowired
     private UserService userService;
     @Autowired

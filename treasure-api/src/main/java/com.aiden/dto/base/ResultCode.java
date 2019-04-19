@@ -22,6 +22,10 @@ public enum ResultCode {
      */
      LOGIN_FAIL_USER_NOT_EXIST("-20001","用户不存在"),
     LOGIN_FAIL_PASSWORD_ERROR("-20002","密码错误"),
+    /**
+     *
+     */
+    USER_FAIL_PASSWORD_ERROR("-30001","原密码错误"),
     ;
 
     private final String code;
