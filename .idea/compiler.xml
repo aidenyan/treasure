@@ -13,11 +13,11 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="treasure" target="1.5" />
-      <module name="treasure-api" target="1.5" />
-      <module name="treasure-common" target="1.5" />
-      <module name="treasure-dao" target="1.5" />
-      <module name="treasure-service" target="1.5" />
+      <module name="treasure" target="1.8" />
+      <module name="treasure-api" target="1.8" />
+      <module name="treasure-common" target="1.8" />
+      <module name="treasure-dao" target="1.8" />
+      <module name="treasure-service" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

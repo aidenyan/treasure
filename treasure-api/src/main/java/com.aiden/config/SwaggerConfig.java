@@ -1,4 +1,4 @@
-package com.aiden.swagger;
+package com.aiden.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

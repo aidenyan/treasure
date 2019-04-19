@@ -5,7 +5,7 @@ CONFDIR="${DK_HOME}/../conf"
 LOG_HOME="${DK_HOME}/../logs"
 WORK_HOME="${DK_HOME}/../work"
 CLASSPATH="${DK_HOME}/../lib/*:${CONFDIR}"
-MAINCLASS="com.zcckj.Application"
+MAINCLASS="com.aiden.Application"
 
 if [ ! -d $LOG_HOME ]; then
     mkdir $LOG_HOME
@@ -29,7 +29,7 @@ else
 fi
 
 
-"$JAVA" $JAVA_OPTS $JAVA_MEM_OPTS "-javaagent:/data/pinpoint-agent-1.6.2/pinpoint-bootstrap-1.6.2.jar" "-Dpinpoint.agentId.prefix=zc-bigdata"  "-Dpinpoint.applicationName=zc-bigdata" "-Dlog4j.level=WARN" "-Dlog.home=${LOG_HOME}" "-Dwork.home=${WORK_HOME}" -cp $CLASSPATH $MAINCLASS > $STDOUT_FILE 2>&1 &
+"$JAVA" $JAVA_OPTS $JAVA_MEM_OPTS "-Dpinpoint.agentId.prefix=treasure"  "-Dpinpoint.applicationName=treasure" "-Dlog4j.level=WARN" "-Dlog.home=${LOG_HOME}" "-Dwork.home=${WORK_HOME}" -cp $CLASSPATH $MAINCLASS > $STDOUT_FILE 2>&1 &
 
 COUNT=0
 while [ $COUNT -lt 1 ]; do
