@@ -1,5 +1,6 @@
 package com.aiden.entity;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 public class UserDetail {
@@ -24,6 +25,42 @@ public class UserDetail {
     private String invitationCode;
 
     private Long userId;
+    private BigDecimal balanceAmount;
+    private BigDecimal alreadyAmount;
+    private String accountName;
+    private String accountNum;
+
+    public BigDecimal getBalanceAmount() {
+        return balanceAmount;
+    }
+
+    public void setBalanceAmount(BigDecimal balanceAmount) {
+        this.balanceAmount = balanceAmount;
+    }
+
+    public BigDecimal getAlreadyAmount() {
+        return alreadyAmount;
+    }
+
+    public void setAlreadyAmount(BigDecimal alreadyAmount) {
+        this.alreadyAmount = alreadyAmount;
+    }
+
+    public String getAccountName() {
+        return accountName;
+    }
+
+    public void setAccountName(String accountName) {
+        this.accountName = accountName;
+    }
+
+    public String getAccountNum() {
+        return accountNum;
+    }
+
+    public void setAccountNum(String accountNum) {
+        this.accountNum = accountNum;
+    }
 
     public Long getUserId() {
         return userId;

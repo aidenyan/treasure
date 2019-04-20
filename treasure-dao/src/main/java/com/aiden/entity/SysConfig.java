@@ -9,14 +9,41 @@ public class SysConfig {
     private BigDecimal treasureTotalAmount;
 
     private Date treasureEndTime;
+    private Integer treasureAlreadyHightNum;
 
+    private Integer treasureAlreadyLowNum;
     private Integer treasureHightNum;
 
     private Integer treasureLowNum;
 
-    private Integer treasureEnabled;
+    private Boolean treasureEnabled;
 
     private String smsContent;
+    private BigDecimal treasureAlreadyTotalAmount;
+
+    public BigDecimal getTreasureAlreadyTotalAmount() {
+        return treasureAlreadyTotalAmount;
+    }
+
+    public void setTreasureAlreadyTotalAmount(BigDecimal treasureAlreadyTotalAmount) {
+        this.treasureAlreadyTotalAmount = treasureAlreadyTotalAmount;
+    }
+
+    public Integer getTreasureAlreadyHightNum() {
+        return treasureAlreadyHightNum;
+    }
+
+    public void setTreasureAlreadyHightNum(Integer treasureAlreadyHightNum) {
+        this.treasureAlreadyHightNum = treasureAlreadyHightNum;
+    }
+
+    public Integer getTreasureAlreadyLowNum() {
+        return treasureAlreadyLowNum;
+    }
+
+    public void setTreasureAlreadyLowNum(Integer treasureAlreadyLowNum) {
+        this.treasureAlreadyLowNum = treasureAlreadyLowNum;
+    }
 
     public Long getId() {
         return id;
@@ -58,11 +85,11 @@ public class SysConfig {
         this.treasureLowNum = treasureLowNum;
     }
 
-    public Integer getTreasureEnabled() {
+    public Boolean getTreasureEnabled() {
         return treasureEnabled;
     }
 
-    public void setTreasureEnabled(Integer treasureEnabled) {
+    public void setTreasureEnabled(Boolean treasureEnabled) {
         this.treasureEnabled = treasureEnabled;
     }
 

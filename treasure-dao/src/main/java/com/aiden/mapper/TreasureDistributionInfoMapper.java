@@ -1,17 +1,23 @@
 package com.aiden.mapper;
 
 import com.aiden.entity.TreasureDistributionInfo;
+import org.apache.ibatis.annotations.Param;
 
 public interface TreasureDistributionInfoMapper {
-    int deleteByPrimaryKey(Long id);
+
 
     int insert(TreasureDistributionInfo record);
 
-    int insertSelective(TreasureDistributionInfo record);
 
-    TreasureDistributionInfo selectByPrimaryKey(Long id);
+    TreasureDistributionInfo findById(Long id);
 
-    int updateByPrimaryKeySelective(TreasureDistributionInfo record);
+    /**
+     * 打开宝藏
+     * @param treasureDistributionId
+     * @param userId
+     * @param isReceive
+     */
+    int openTreasure(@Param("treasureDistributionId") Long treasureDistributionId,@Param("userId") Long userId,
+                     @Param("isReceive") boolean isReceive);
 
-    int updateByPrimaryKey(TreasureDistributionInfo record);
 }

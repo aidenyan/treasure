@@ -18,13 +18,24 @@
     id, treasure_name, level, distance, type, content, amount, end_time, probability, total_amount,
     already_amount
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_treasure_info
     where id = #{id,jdbcType=BIGINT}
   </select>
 
+  <update id="updateTreasureAmount">
+    UPDATE t_treasure_info SET
+    already_amount=#{newAlreadyAmount}
+    WHERE id=#{id}
+    <if test="alreadyAmount != null">
+      AND already_amount=#{alreadyAmount}
+    </if>
+    <if test="alreadyAmount == null">
+      AND already_amount is NULL
+    </if>
+  </update>
 
   <insert id="insert" parameterType="com.aiden.entity.TreasureInfo" >
     insert into t_treasure_info

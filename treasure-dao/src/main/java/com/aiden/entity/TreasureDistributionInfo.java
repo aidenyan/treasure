@@ -14,7 +14,7 @@ public class TreasureDistributionInfo {
 
     private Long userId;
 
-    private Byte isReceive;
+    private Boolean isReceive;
 
     private BigDecimal amount;
 
@@ -70,11 +70,11 @@ public class TreasureDistributionInfo {
         this.userId = userId;
     }
 
-    public Byte getIsReceive() {
+    public Boolean getIsReceive() {
         return isReceive;
     }
 
-    public void setIsReceive(Byte isReceive) {
+    public void setIsReceive(Boolean isReceive) {
         this.isReceive = isReceive;
     }
 

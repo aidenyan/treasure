@@ -20,12 +20,17 @@
     id, treasure_id, lat, lng, user_id, is_receive, amount, content, create_type, created_time, 
     create_id, receive_time, type
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_treasure_distribution_info
     where id = #{id,jdbcType=BIGINT}
   </select>
+  <update id="openTreasure">
+    UPDATE t_treasure_distribution_info set
+    receive_time=NOW(),user_id=#{userId},is_receive=#{isReceive}
+    where id=#{treasureDistributionId} and user_id is NULL ;
+  </update>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
     delete from t_treasure_distribution_info
     where id = #{id,jdbcType=BIGINT}

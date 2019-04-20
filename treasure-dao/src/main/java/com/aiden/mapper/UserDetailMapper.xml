@@ -13,10 +13,15 @@
     <result column="front_id_card_url" property="frontIdCardUrl" jdbcType="VARCHAR" />
     <result column="reverse_id_card_url" property="reverseIdCardUrl" jdbcType="VARCHAR" />
     <result column="invitation_code" property="invitationCode" jdbcType="VARCHAR" />
+    <result column="balance_amount" property="balanceAmount" jdbcType="DECIMAL"/>
+    <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL"/>
+    <result column="account_num" property="accountNum" jdbcType="VARCHAR" />
+    <result column="account_name" property="accountName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, sex, birth_day, introduce, header_url, has_certification, identification_card, 
-    front_id_card_url, reverse_id_card_url, invitation_code,user_id
+    front_id_card_url, reverse_id_card_url, invitation_code,user_id,balance_amount,
+    already_amount,account_num,account_name
   </sql>
   <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -68,6 +73,21 @@
       <if test=" userId != null">
         user_id,
       </if>
+
+      <if test=" balanceAmount != null">
+        balance_amount,
+      </if>
+      <if test=" alreadyAmount != null">
+        already_amount,
+      </if>
+      <if test=" accountNum != null">
+        account_num,
+      </if>
+      <if test=" accountName != null">
+        account_name,
+      </if>
+
+
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -103,6 +123,20 @@
       <if test="userId != null" >
         #{userId,jdbcType=BIGINT},
       </if>
+
+      <if test=" balanceAmount != null">
+        #{balanceAmount},
+
+      </if>
+      <if test=" alreadyAmount != null">
+        #{alreadyAmount},
+      </if>
+      <if test=" accountNum != null">
+        #{accountNum},
+      </if>
+      <if test=" accountName != null">
+        #{accountName},
+      </if>
     </trim>
   </insert>
   <update id="update" parameterType="com.aiden.entity.UserDetail" >
@@ -135,7 +169,26 @@
       <if test="invitationCode != null" >
         Invitation_code = #{invitationCode,jdbcType=VARCHAR},
       </if>
+
+
+      <if test=" accountNum != null">
+        account_num= #{accountNum},
+      </if>
+      <if test=" accountName != null">
+        account_name=   #{accountName},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateBalanceAmount">
+    UPDATE t_user_detail SET
+    balance_amount=#{newBalanceAmount}
+    WHERE id=#{id}
+    <if test="balanceAmount != null">
+      AND balance_amount=#{balanceAmount}
+    </if>
+    <if test="balanceAmount == null">
+      AND balance_amount is NULL
+    </if>
   </update>
 </mapper>
