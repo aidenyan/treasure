@@ -1,152 +1,158 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.aiden.mapper.TreasureInfoMapper" >
-  <resultMap id="BaseResultMap" type="com.aiden.entity.TreasureInfo" >
-    <id column="id" property="id" jdbcType="BIGINT" />
-    <result column="treasure_name" property="treasureName" jdbcType="VARCHAR" />
-    <result column="level" property="level" jdbcType="TINYINT" />
-    <result column="distance" property="distance" jdbcType="DECIMAL" />
-    <result column="type" property="type" jdbcType="TINYINT" />
-    <result column="content" property="content" jdbcType="VARCHAR" />
-    <result column="amount" property="amount" jdbcType="DECIMAL" />
-    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="probability" property="probability" jdbcType="DECIMAL" />
-    <result column="total_amount" property="totalAmount" jdbcType="DECIMAL" />
-    <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL" />
-  </resultMap>
-  <sql id="Base_Column_List" >
+<mapper namespace="com.aiden.mapper.TreasureInfoMapper">
+    <resultMap id="BaseResultMap" type="com.aiden.entity.TreasureInfo">
+        <id column="id" property="id" jdbcType="BIGINT"/>
+        <result column="treasure_name" property="treasureName" jdbcType="VARCHAR"/>
+        <result column="level" property="level" jdbcType="TINYINT"/>
+        <result column="distance" property="distance" jdbcType="DECIMAL"/>
+        <result column="type" property="type" jdbcType="TINYINT"/>
+        <result column="content" property="content" jdbcType="VARCHAR"/>
+        <result column="amount" property="amount" jdbcType="DECIMAL"/>
+        <result column="end_time" property="endTime" jdbcType="TIMESTAMP"/>
+        <result column="probability" property="probability" jdbcType="DECIMAL"/>
+        <result column="total_amount" property="totalAmount" jdbcType="DECIMAL"/>
+        <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL"/>
+    </resultMap>
+    <sql id="Base_Column_List">
     id, treasure_name, level, distance, type, content, amount, end_time, probability, total_amount,
     already_amount
   </sql>
-  <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
-    select 
-    <include refid="Base_Column_List" />
-    from t_treasure_info
-    where id = #{id,jdbcType=BIGINT}
-  </select>
+    <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long">
+        select
+        <include refid="Base_Column_List"/>
+        from t_treasure_info
+        where id = #{id,jdbcType=BIGINT}
+    </select>
 
-  <update id="updateTreasureAmount">
-    UPDATE t_treasure_info SET
-    already_amount=#{newAlreadyAmount}
-    WHERE id=#{id}
-    <if test="alreadyAmount != null">
-      AND already_amount=#{alreadyAmount}
-    </if>
-    <if test="alreadyAmount == null">
-      AND already_amount is NULL
-    </if>
-  </update>
+    <select id="findAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_treasure_info
+    </select>
 
-  <insert id="insert" parameterType="com.aiden.entity.TreasureInfo" >
-    insert into t_treasure_info
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="treasureName != null" >
-        treasure_name,
-      </if>
-      <if test="level != null" >
-        level,
-      </if>
-      <if test="distance != null" >
-        distance,
-      </if>
-      <if test="type != null" >
-        type,
-      </if>
-      <if test="content != null" >
-        content,
-      </if>
-      <if test="amount != null" >
-        amount,
-      </if>
-      <if test="endTime != null" >
-        end_time,
-      </if>
-      <if test="probability != null" >
-        probability,
-      </if>
-      <if test="totalAmount != null" >
-        total_amount,
-      </if>
-      <if test="alreadyAmount != null" >
-        already_amount,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id},
-      </if>
-      <if test="treasureName != null" >
-        #{treasureName},
-      </if>
-      <if test="distance != null" >
-        #{distance},
-      </if>
-      <if test="level != null" >
-        #{level},
-      </if>
-      <if test="type != null" >
-        #{type},
-      </if>
-      <if test="content != null" >
-        #{content},
-      </if>
-      <if test="amount != null" >
-        #{amount},
-      </if>
-      <if test="endTime != null" >
-        #{endTime},
-      </if>
-      <if test="probability != null" >
-        #{probability},
-      </if>
-      <if test="totalAmount != null" >
-        #{totalAmount},
-      </if>
-      <if test="alreadyAmount != null" >
-        #{alreadyAmount},
-      </if>
-    </trim>
-  </insert>
-  <update id="update" parameterType="com.aiden.entity.TreasureInfo" >
-    update t_treasure_info
-    <set >
-      <if test="treasureName != null" >
-        treasure_name = #{treasureName,jdbcType=VARCHAR},
-      </if>
-      <if test="level != null" >
-        level = #{level,jdbcType=TINYINT},
-      </if>
-      <if test="distance != null" >
-        distance = #{distance,jdbcType=DECIMAL},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=TINYINT},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="endTime != null" >
-        end_time = #{endTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="probability != null" >
-        probability = #{probability,jdbcType=DECIMAL},
-      </if>
-      <if test="totalAmount != null" >
-        total_amount = #{totalAmount,jdbcType=DECIMAL},
-      </if>
-      <if test="alreadyAmount != null" >
-        already_amount = #{alreadyAmount,jdbcType=DECIMAL},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.aiden.entity.TreasureInfo" >
+    <update id="updateTreasureAmount">
+        UPDATE t_treasure_info SET
+        already_amount=#{newAlreadyAmount}
+        WHERE id=#{id}
+        <if test="alreadyAmount != null">
+            AND already_amount=#{alreadyAmount}
+        </if>
+        <if test="alreadyAmount == null">
+            AND already_amount is NULL
+        </if>
+    </update>
+
+    <insert id="insert" parameterType="com.aiden.entity.TreasureInfo">
+        insert into t_treasure_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="treasureName != null">
+                treasure_name,
+            </if>
+            <if test="level != null">
+                level,
+            </if>
+            <if test="distance != null">
+                distance,
+            </if>
+            <if test="type != null">
+                type,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+            <if test="amount != null">
+                amount,
+            </if>
+            <if test="endTime != null">
+                end_time,
+            </if>
+            <if test="probability != null">
+                probability,
+            </if>
+            <if test="totalAmount != null">
+                total_amount,
+            </if>
+            <if test="alreadyAmount != null">
+                already_amount,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id},
+            </if>
+            <if test="treasureName != null">
+                #{treasureName},
+            </if>
+            <if test="distance != null">
+                #{distance},
+            </if>
+            <if test="level != null">
+                #{level},
+            </if>
+            <if test="type != null">
+                #{type},
+            </if>
+            <if test="content != null">
+                #{content},
+            </if>
+            <if test="amount != null">
+                #{amount},
+            </if>
+            <if test="endTime != null">
+                #{endTime},
+            </if>
+            <if test="probability != null">
+                #{probability},
+            </if>
+            <if test="totalAmount != null">
+                #{totalAmount},
+            </if>
+            <if test="alreadyAmount != null">
+                #{alreadyAmount},
+            </if>
+        </trim>
+    </insert>
+    <update id="update" parameterType="com.aiden.entity.TreasureInfo">
+        update t_treasure_info
+        <set>
+            <if test="treasureName != null">
+                treasure_name = #{treasureName,jdbcType=VARCHAR},
+            </if>
+            <if test="level != null">
+                level = #{level,jdbcType=TINYINT},
+            </if>
+            <if test="distance != null">
+                distance = #{distance,jdbcType=DECIMAL},
+            </if>
+            <if test="type != null">
+                type = #{type,jdbcType=TINYINT},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=VARCHAR},
+            </if>
+            <if test="amount != null">
+                amount = #{amount,jdbcType=DECIMAL},
+            </if>
+            <if test="endTime != null">
+                end_time = #{endTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="probability != null">
+                probability = #{probability,jdbcType=DECIMAL},
+            </if>
+            <if test="totalAmount != null">
+                total_amount = #{totalAmount,jdbcType=DECIMAL},
+            </if>
+            <if test="alreadyAmount != null">
+                already_amount = #{alreadyAmount,jdbcType=DECIMAL},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.aiden.entity.TreasureInfo">
     update t_treasure_info
     set treasure_name = #{treasureName,jdbcType=VARCHAR},
       level = #{level,jdbcType=TINYINT},
@@ -160,4 +166,32 @@
       already_amount = #{alreadyAmount,jdbcType=DECIMAL}
     where id = #{id,jdbcType=BIGINT}
   </update>
+    <resultMap id="unreceiveTreasure" type="com.aiden.entity.UnreceiveTreasure">
+        <result column="treasure_name" property="treasureName"/>
+        <result column="level" property="level" />
+        <result column="distance" property="distance"/>
+        <result column="type" property="type" />
+        <result column="lng" property="lng"/>
+        <result column="lat" property="lat" />
+        <result column="treasure_id" property="treasureId" />
+        <result column="treasure_distribution_id" property="treasureDistributionId" />
+        <result column="juli" property="juli" />
+    </resultMap>
+    <select id="findUnReceiveTreasure" resultMap="unreceiveTreasure">
+        select * from(select
+        tti.treasure_name,tti.`level`,
+        tti.distance,tti.type,ttdi.lat,ttdi.lng,
+        ttdi.id treasure_distribution_id,tti.id treasure_id,
+        ROUND(6378.138 * 2 * ASIN(
+        SQRT(POW(SIN((#{lat} * PI() / 180 - ttdi.lat * PI() / 180 ) / 2),2) + COS(#{lat}  * PI() / 180) * COS(ttdi.lat * PI() / 180) * POW(
+        SIN((#{lng} * PI() / 180 - ttdi.lng * PI() / 180) / 2),2  ) )) * 1000) AS juli
+        from t_treasure_distribution_info ttdi
+        join t_treasure_info tti on ttdi.treasure_id=tti.id
+        where tti.end_time>now() and ttdi.user_id is null)t where 1=1
+        <if test=" distance != null ">
+         and juli &lt; #{distance}
+        </if>
+        ORDER  by juli
+        limit 1000
+    </select>
 </mapper>

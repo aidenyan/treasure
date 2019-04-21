@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.aiden.mapper.CashInfoMapper">
+    <resultMap id="BaseResultMap" type="com.aiden.entity.CashInfo">
+        <id column="ID" property="id" jdbcType="BIGINT"/>
+        <result column="user_id" property="userId" />
+        <result column="cash_withdrawal" property="cashWithdrawal" />
+        <result column="type" property="type" />
+        <result column="status" property="status" />
+        <result column="account_num" property="accountNum" />
+        <result column="account_name" property="accountName" />
+        <result column="created_time" property="createdTime" />
+        <result column="complete_time" property="completeTime" />
+
+    </resultMap>
+    <sql id="Base_Column_List">
+    ID, user_id,cash_withdrawal, status,type,account_num,account_name, complete_time, created_time
+  </sql>
+    <select id="count" resultType="java.lang.Integer">
+        select count(id)
+        from t_cash_info
+        where user_id=#{userId}
+    </select>
+   <select id="findList" resultMap="BaseResultMap">
+       select
+       <include refid="Base_Column_List" />
+       from t_cash_info
+       where user_id=#{userId}
+       ORDER BY  id DESC limit #{start},#{pageSize}
+   </select>
+    <insert id="insert" parameterType="com.aiden.entity.CashInfo" >
+        insert into t_cash_info
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="userId != null" >
+                user_id,
+            </if>
+            <if test="cashWithdrawal != null" >
+                cash_withdrawal,
+            </if>
+            <if test="type != null" >
+                type,
+            </if>
+            <if test="status != null" >
+                status,
+            </if>
+            <if test="accountNum != null" >
+                account_num,
+            </if>
+            <if test="accountName != null" >
+                account_name,
+            </if>
+            <if test="createdTime != null" >
+                created_time,
+            </if>
+            <if test="completeTime != null" >
+                complete_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id},
+            </if>
+            <if test="userId != null" >
+                #{userId},
+            </if>
+            <if test="cashWithdrawal != null" >
+                #{cashWithdrawal},
+            </if>
+            <if test="type != null" >
+                #{type},
+            </if>
+            <if test="status != null" >
+                #{status},
+            </if>
+            <if test="accountNum != null" >
+                #{accountNum},
+            </if>
+            <if test="accountName != null" >
+                #{accountName},
+            </if>
+            <if test="createdTime != null" >
+                #{createdTime},
+            </if>
+            <if test="completeTime != null" >
+                #{completeTime},
+            </if>
+        </trim>
+    </insert>
+</mapper>

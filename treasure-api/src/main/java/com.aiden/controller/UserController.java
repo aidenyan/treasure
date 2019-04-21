@@ -1,19 +1,27 @@
 package com.aiden.controller;
 
+import com.aiden.base.Page;
+import com.aiden.base.ResultCode;
+import com.aiden.base.ResultModel;
+import com.aiden.common.enums.BalanceTypeEnum;
+import com.aiden.common.enums.StatusEnum;
 import com.aiden.common.utils.DateUtils;
 import com.aiden.common.utils.FileUtils;
 import com.aiden.common.utils.PasswrodUtils;
-import com.aiden.dto.base.ResultCode;
-import com.aiden.dto.base.ResultModel;
+import com.aiden.dto.CashInfoDto;
+import com.aiden.entity.CashInfo;
 import com.aiden.entity.User;
 import com.aiden.entity.UserDetail;
 import com.aiden.exception.FileException;
+import com.aiden.exception.ServiceException;
 import com.aiden.exception.UnloginException;
+import com.aiden.service.CashInfoService;
 import com.aiden.service.UserDetailService;
 import com.aiden.service.UserService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -21,6 +29,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Administrator on 2019/4/19/019.
@@ -31,6 +42,9 @@ public class UserController extends BaseController {
     public static final String FILE_PATH = "/header/img";
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private CashInfoService cashInfoService;
 
     @Autowired
     private UserDetailService userDetailService;
@@ -108,7 +122,71 @@ public class UserController extends BaseController {
         updateUser.setPassword(PasswrodUtils.md5(newPassword.toLowerCase(), key));
         userService.update(user);
         return new ResultModel<>(ResultCode.SUCCESS);
+    }
 
+
+    @PostMapping("/invite_friend")
+    @ResponseBody
+    @ApiOperation("获取邀请码")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
+    })
+    public ResultModel<String> inviteFriend( @RequestHeader(value = "token") String token) {
+        User user = userService.findToken(token);
+        if (user == null) {
+            throw new UnloginException();
+        }
+        UserDetail userDetail = userDetailService.findByUserId(user.getId());
+        if (userDetail == null) {
+            throw new ServiceException("系统信息错误");
+        }
+        return new ResultModel<>(ResultCode.SUCCESS, userDetail.getInvitationCode());
+    }
+
+    @PostMapping("/balance/page")
+    @ResponseBody
+    @ApiOperation("获取钱包信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "currentPage", value = "当前页", paramType = "query", dataType = "Integer"),
+            @ApiImplicitParam(name = "pageSize", value = "每页数", paramType = "query", dataType = "Integer"),
+
+    })
+    public ResultModel<Page<CashInfoDto, BigDecimal>> pageBalance(Integer pageSize, Integer currentPage, @RequestHeader(value = "token") String token) {
+        User user = userService.findToken(token);
+        if (user == null) {
+            throw new UnloginException();
+        }
+        if (currentPage == null) {
+            currentPage = 1;
+        }
+        if (pageSize == null) {
+            pageSize = 10;
+        }
+        UserDetail userDetail = userDetailService.findByUserId(user.getId());
+        if (userDetail == null) {
+            throw new ServiceException("系统信息错误");
+        }
+        Page<CashInfo, Void> page = cashInfoService.page(user.getId(), currentPage, pageSize);
+        List<CashInfoDto> cashInfoDtoList = new ArrayList<>();
+        if (!CollectionUtils.isEmpty(page.getResult())) {
+            page.getResult().forEach(cashInfo -> {
+                CashInfoDto cashInfoDto = new CashInfoDto();
+                cashInfoDto.setAccountName(cashInfo.getAccountName());
+                cashInfoDto.setAccountNum(cashInfo.getAccountNum());
+                cashInfoDto.setCashWithdrawal(cashInfo.getCashWithdrawal());
+                cashInfoDto.setCompleteTime(cashInfo.getCompleteTime());
+                cashInfoDto.setCreatedTime(cashInfo.getCreatedTime());
+                cashInfoDto.setId(cashInfo.getId());
+                cashInfoDto.setStatus(StatusEnum.valueOf(cashInfo.getStatus()));
+                cashInfoDto.setType(BalanceTypeEnum.valueOf(cashInfo.getType()));
+                cashInfoDto.setUserId(user.getId());
+                cashInfoDtoList.add(cashInfoDto);
+            });
+        }
+
+        Page<CashInfoDto, BigDecimal> resultPage = page.convert(cashInfoDtoList, userDetail.getBalanceAmount());
+        return new ResultModel<>(ResultCode.SUCCESS, resultPage);
     }
 
 }

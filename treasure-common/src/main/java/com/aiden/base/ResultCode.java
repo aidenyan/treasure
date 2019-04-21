@@ -1,4 +1,4 @@
-package com.aiden.dto.base;
+package com.aiden.base;
 
 /**
  * Created by Administrator on 2019/4/15/015.
@@ -47,6 +47,7 @@ public enum ResultCode {
      * 活动红包已经领取
      */
     TREASURE_FAIL_COMPLETED("-40004","活动没有启动"),
+    TREASURE_FAIL_NOT_EXIST("-40005","宝藏类型不存在"),
     ;
 
     private final String code;

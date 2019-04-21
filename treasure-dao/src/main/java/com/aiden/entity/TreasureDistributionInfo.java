@@ -20,7 +20,7 @@ public class TreasureDistributionInfo {
 
     private String content;
 
-    private Byte createType;
+    private Integer createType;
 
     private Date createdTime;
 
@@ -28,7 +28,7 @@ public class TreasureDistributionInfo {
 
     private Date receiveTime;
 
-    private String type;
+    private Integer type;
 
     public Long getId() {
         return id;
@@ -94,11 +94,11 @@ public class TreasureDistributionInfo {
         this.content = content == null ? null : content.trim();
     }
 
-    public Byte getCreateType() {
+    public Integer getCreateType() {
         return createType;
     }
 
-    public void setCreateType(Byte createType) {
+    public void setCreateType(Integer createType) {
         this.createType = createType;
     }
 
@@ -126,11 +126,11 @@ public class TreasureDistributionInfo {
         this.receiveTime = receiveTime;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

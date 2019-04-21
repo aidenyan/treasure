@@ -1,14 +1,12 @@
-package com.aiden.dto.base;
-
-import lombok.Data;
+package com.aiden.base;
 
 import java.util.List;
 
 /**
  * Created by Administrator on 2019/4/16/016.
  */
-@Data
-public class Page<T> {
+
+public class Page<T,E> {
 
     public final static Integer MAX_PAGE_SIZE = 1000;
 
@@ -28,6 +26,7 @@ public class Page<T> {
      */
     private List<T> result;
 
+    private E data;
     /**
      * 总的页数
      */
@@ -45,7 +44,7 @@ public class Page<T> {
     public Integer getCurrentPage() {
         if (currentPage == null || currentPage <= 0 || pageSize > MAX_PAGE_SIZE) {
             currentPage = 1;
-        }else if (currentPage > getTotalPage()) {
+        } else if (currentPage > getTotalPage()) {
             currentPage = getTotalPage();
         }
         return currentPage;
@@ -61,14 +60,50 @@ public class Page<T> {
         return totalPage;
     }
 
-    public <E> Page<E> convert(List<E> list){
-        Page<E> page=new Page<>();
+    public <V,G> Page<V,G> convert(List<V> list,G g) {
+        Page<V,G> page = new Page<>();
         page.setCurrentPage(currentPage);
         page.setTotal(total);
         page.setPageSize(pageSize);
         page.setTotalPage(totalPage);
         page.setResult(list);
+        page.setData(g);
         return page;
     }
 
+    public void setPageSize(Integer pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    public void setCurrentPage(Integer currentPage) {
+        this.currentPage = currentPage;
+    }
+
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public List<T> getResult() {
+        return result;
+    }
+
+    public void setResult(List<T> result) {
+        this.result = result;
+    }
+
+    public void setTotalPage(Integer totalPage) {
+        this.totalPage = totalPage;
+    }
+
+    public E getData() {
+        return data;
+    }
+
+    public void setData(E data) {
+        this.data = data;
+    }
 }
