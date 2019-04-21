@@ -12,10 +12,7 @@ import com.aiden.exception.ServiceException;
 import com.aiden.exception.UpdateException;
 import com.aiden.mapper.TreasureDistributionInfoMapper;
 import com.aiden.mapper.TreasureInfoMapper;
-import com.aiden.service.CashInfoService;
-import com.aiden.service.SysConfigService;
-import com.aiden.service.TreasureService;
-import com.aiden.service.UserDetailService;
+import com.aiden.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -36,6 +33,9 @@ public class TreasureServiceImpl implements TreasureService {
 
     @Autowired
     private TreasureInfoMapper treasureInfoMapper;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private SysConfigService sysConfigService;
@@ -134,6 +134,7 @@ public class TreasureServiceImpl implements TreasureService {
         cashInfo.setType(BalanceTypeEnum.RED_ENVELOPES.getType());
         cashInfo.setUserId(userId);
         cashInfoService.save(cashInfo);
+        userService.updateTreasurePoint(userId,-1);
     }
 
 

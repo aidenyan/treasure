@@ -15,5 +15,7 @@ public interface UserDetailMapper {
     void insert(UserDetail userDetail);
 
     int countByCode(@Param("invitationCode") String invitationCode);
+
+    UserDetail findByInvitedCode(@Param("invitationCode")String invitedCode);
     int updateBalanceAmount(@Param("id") Long id, @Param("balanceAmount")BigDecimal balanceAmount,@Param("newBalanceAmount")BigDecimal newBalanceAmount);
 }

@@ -9,7 +9,7 @@ public class IntegralInfo {
 
     private Integer point;
 
-    private String type;
+    private Integer type;
 
     private Date createdDate;
 
@@ -39,12 +39,12 @@ public class IntegralInfo {
         this.point = point;
     }
 
-    public String getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
+    public void setType(Integer type) {
+        this.type = type;
     }
 
     public Date getCreatedDate() {

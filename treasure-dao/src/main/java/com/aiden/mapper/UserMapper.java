@@ -3,6 +3,8 @@ package com.aiden.mapper;
 import com.aiden.entity.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.math.BigDecimal;
+
 public interface UserMapper {
     /**
      * 保存
@@ -40,6 +42,7 @@ public interface UserMapper {
     int update(User record);
 
 
+    int updateTreasurePoint(@Param("id") Long id, @Param("treasurePoint")Integer treasurePoint, @Param("newTreasurePoint")Integer newTreasurePoint);
 
 
 }

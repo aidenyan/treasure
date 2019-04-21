@@ -29,7 +29,12 @@
     from t_user_detail
     where user_id = #{userId}
   </select>
-
+  <select id="findByInvitedCode" resultMap="BaseResultMap"  >
+    select
+    <include refid="Base_Column_List" />
+    from t_user_detail
+    where invitation_code = #{invitationCode}
+  </select>
   <select id="countByCode" resultType="java.lang.Integer" >
     select
     count(id)

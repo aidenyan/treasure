@@ -12,7 +12,7 @@ import java.util.UUID;
  * Created by Administrator on 2019/4/19/019.
  */
 public class FileUtils {
-    public static final String BASE_URL = "c:/work/file/";
+    public static final String BASE_URL = "/var/file/";
 
     public static String saveFile(String path, InputStream inputStream, String fileType) {
         String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();

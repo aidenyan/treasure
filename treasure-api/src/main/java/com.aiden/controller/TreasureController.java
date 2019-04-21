@@ -9,9 +9,11 @@ import com.aiden.dto.UnreceiveTreasureDto;
 import com.aiden.base.ResultCode;
 import com.aiden.base.ResultModel;
 import com.aiden.entity.*;
+import com.aiden.exception.ServiceException;
 import com.aiden.exception.UnloginException;
 import com.aiden.service.SysConfigService;
 import com.aiden.service.TreasureService;
+import com.aiden.service.UserDetailService;
 import com.aiden.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -30,12 +32,16 @@ import java.util.List;
 /**
  * Created by Administrator on 2019/4/19/019.
  */
-@Controller("/treasure")
-@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
+//@Controller("/treasure")
+//@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
 public class TreasureController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private UserDetailService userDetailService;
+
 
     @Autowired
     private TreasureService treasureService;
@@ -112,6 +118,15 @@ public class TreasureController {
         if (user == null) {
             throw new UnloginException();
         }
+        UserDetail userDetail=userDetailService.findByUserId(user.getId());
+        if (userDetail == null) {
+            throw new ServiceException("系统数据错误");
+        }
+        if(user.getTreasurePoint()==null||user.getTreasurePoint()<=0){
+            return new ResultModel<>(ResultCode.TREASURE_FAIL_NOT_POINT);
+        }
+
+
         TreasureDistributionInfo treasureDistributionInfo = treasureService.findTreasureDistributionInfo(treasureDistributionId);
         if (treasureDistributionInfo == null) {
             return new ResultModel<>(ResultCode.ERROR);

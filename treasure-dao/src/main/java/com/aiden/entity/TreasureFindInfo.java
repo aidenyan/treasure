@@ -9,7 +9,7 @@ public class TreasureFindInfo {
 
     private Integer point;
 
-    private String type;
+    private Integer type;
 
     private Date createdDate;
 
@@ -39,13 +39,11 @@ public class TreasureFindInfo {
         this.point = point;
     }
 
-    public String getType() {
-        return type;
+    public void setType(Integer type) {
+        this.type = type;
     }
 
-    public void setType(String type) {
-        this.type = type == null ? null : type.trim();
-    }
+
 
     public Date getCreatedDate() {
         return createdDate;

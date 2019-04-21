@@ -11,9 +11,14 @@
 
     <artifactId>treasure-service</artifactId>
     <dependencies>
-
+        <dependency>
+            <groupId>com.aliyun</groupId>
+            <artifactId>aliyun-java-sdk-core</artifactId>
+            <version>4.0.3</version>
+        </dependency>
 
     <dependency>
+
         <groupId>com.aiden</groupId>
         <artifactId>treasure-dao</artifactId>
         <version>${parent.version}</version>

@@ -18,8 +18,34 @@ public class SysConfig {
 
     private Boolean treasureEnabled;
 
-    private String smsContent;
+    private String accessKey;
+    private String accessSecret;
     private BigDecimal treasureAlreadyTotalAmount;
+    private Boolean smsEnabled;
+
+    public Boolean getSmsEnabled() {
+        return smsEnabled;
+    }
+
+    public void setSmsEnabled(Boolean smsEnabled) {
+        this.smsEnabled = smsEnabled;
+    }
+
+    public String getAccessKey() {
+        return accessKey;
+    }
+
+    public void setAccessKey(String accessKey) {
+        this.accessKey = accessKey;
+    }
+
+    public String getAccessSecret() {
+        return accessSecret;
+    }
+
+    public void setAccessSecret(String accessSecret) {
+        this.accessSecret = accessSecret;
+    }
 
     public BigDecimal getTreasureAlreadyTotalAmount() {
         return treasureAlreadyTotalAmount;
@@ -93,11 +119,5 @@ public class SysConfig {
         this.treasureEnabled = treasureEnabled;
     }
 
-    public String getSmsContent() {
-        return smsContent;
-    }
 
-    public void setSmsContent(String smsContent) {
-        this.smsContent = smsContent == null ? null : smsContent.trim();
-    }
 }

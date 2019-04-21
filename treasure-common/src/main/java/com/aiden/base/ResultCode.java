@@ -26,6 +26,9 @@ public enum ResultCode {
      */
      LOGIN_FAIL_USER_NOT_EXIST("-20001","用户不存在"),
     LOGIN_FAIL_PASSWORD_ERROR("-20002","密码错误"),
+    LOGIN_FAIL_INVITED_ERROR("-20003","请填写正确的邀请码"),
+    LOGIN_FAIL_INVITED_SELF_ERROR("-20004","邀请码不能填写自己的"),
+    LOGIN_FAIL_INVITED_USER_ERROR("-20005","该用户非新注册用户"),
     /**
      *
      */
@@ -48,6 +51,7 @@ public enum ResultCode {
      */
     TREASURE_FAIL_COMPLETED("-40004","活动没有启动"),
     TREASURE_FAIL_NOT_EXIST("-40005","宝藏类型不存在"),
+    TREASURE_FAIL_NOT_POINT("-40006","用户已经没有寻宝点了"),
     ;
 
     private final String code;

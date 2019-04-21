@@ -10,13 +10,15 @@ import org.apache.ibatis.annotations.Param;
 public interface UserService {
     /**
      * 检查手机号是否存在
+     *
      * @param mobile 手机号码
      * @return 存在
      */
-   boolean isExist(String mobile);
+    boolean isExist(String mobile);
 
     /**
      * 根据手机号码查询
+     *
      * @param mobile
      * @return
      */
@@ -25,6 +27,7 @@ public interface UserService {
 
     /**
      * 根据token查询
+     *
      * @param token
      * @return
      */
@@ -32,6 +35,7 @@ public interface UserService {
 
     /**
      * 根据ID查询
+     *
      * @param id
      * @return
      */
@@ -39,14 +43,25 @@ public interface UserService {
 
     /**
      * 更新
+     *
      * @param record
      */
     void update(User record);
 
     /**
+     * 更新
+     *
+     * @param record
+     */
+    void updateInvition(User record,User invitedUser);
+
+    /**
      * 保存信息
+     *
      * @param user
      * @param userDetail
      */
     void update(User user, UserDetail userDetail);
+
+    void updateTreasurePoint(Long userId, Integer updatePoint);
 }

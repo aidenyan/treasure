@@ -5,7 +5,7 @@
     <id column="id" property="id" jdbcType="BIGINT" />
     <result column="user_id" property="userId" jdbcType="BIGINT" />
     <result column="point" property="point" jdbcType="INTEGER" />
-    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="type" property="type" jdbcType="TINYINT" />
     <result column="created_date" property="createdDate" jdbcType="TIMESTAMP" />
     <result column="modify_date" property="modifyDate" jdbcType="TIMESTAMP" />
   </resultMap>
@@ -18,19 +18,9 @@
     from t_integral_info
     where id = #{id,jdbcType=BIGINT}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
-    delete from t_integral_info
-    where id = #{id,jdbcType=BIGINT}
-  </delete>
+
+
   <insert id="insert" parameterType="com.aiden.entity.IntegralInfo" >
-    insert into t_integral_info (id, user_id, point, 
-      type, created_date, modify_date
-      )
-    values (#{id,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{point,jdbcType=INTEGER}, 
-      #{type,jdbcType=CHAR}, #{createdDate,jdbcType=TIMESTAMP}, #{modifyDate,jdbcType=TIMESTAMP}
-      )
-  </insert>
-  <insert id="insertSelective" parameterType="com.aiden.entity.IntegralInfo" >
     insert into t_integral_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -63,7 +53,7 @@
         #{point,jdbcType=INTEGER},
       </if>
       <if test="type != null" >
-        #{type,jdbcType=CHAR},
+        #{type,jdbcType=TINYINT},
       </if>
       <if test="createdDate != null" >
         #{createdDate,jdbcType=TIMESTAMP},

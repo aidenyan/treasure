@@ -8,6 +8,7 @@ import com.aiden.service.UserDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
 
@@ -22,6 +23,12 @@ public class UserDetailServiceImpl implements UserDetailService {
     @Override
     public UserDetail findByUserId(Long userId) {
         return userDetailMapper.findByUserId(userId);
+    }
+
+    @Override
+    public UserDetail findByInvitedCode(String invitedCode) {
+        Assert.isTrue(!org.springframework.util.StringUtils.isEmpty(invitedCode));
+        return userDetailMapper.findByInvitedCode(invitedCode);
     }
 
     @Override

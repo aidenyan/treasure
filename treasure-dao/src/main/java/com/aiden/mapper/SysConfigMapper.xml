@@ -10,12 +10,14 @@
         <result column="treasure_already_low_num" property="treasureAlreadyLowNum" jdbcType="INTEGER"/>
         <result column="treasure_hight_num" property="treasureHightNum" jdbcType="INTEGER"/>
         <result column="treasure_low_num" property="treasureLowNum" jdbcType="INTEGER"/>
-        <result column="treasure_enabled" property="treasureEnabled" jdbcType="INTEGER"/>
-        <result column="sms_content" property="smsContent" jdbcType="VARCHAR"/>
+        <result column="treasure_enabled" property="treasureEnabled" jdbcType="TINYINT"/>
+        <result column="access_key" property="accessKey" jdbcType="VARCHAR"/>
+        <result column="access_secret" property="accessSecret" jdbcType="VARCHAR"/>
+        <result column="sms_enabled" property="smsEnabled" jdbcType="TINYINT"/>
     </resultMap>
     <sql id="Base_Column_List">
     ID, treasure_total_amount,treasure_already_total_amount, treasure_already_hight_num,treasure_already_low_num,treasure_end_time, treasure_hight_num, treasure_low_num,
-    treasure_enabled, sms_content
+    treasure_enabled, access_key,access_secret,sms_enabled
   </sql>
     <select id="findOne" resultMap="BaseResultMap">
         select

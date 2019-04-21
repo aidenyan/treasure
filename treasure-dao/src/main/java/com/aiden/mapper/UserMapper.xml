@@ -20,11 +20,11 @@
     id, nick_name, mobile, password, token, source, device_id, integral,
     find_treasure_point, treasure_point, luck_poin, Invited_code,is_deleted
   </sql>
-  <select id="find" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+  <select id="find" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
     <include refid="Base_Column_List" />
     from t_user
-    where id = #{id,jdbcType=INTEGER}
+    where id = #{id}
   </select>
   <select id="findByMobile" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select
@@ -161,5 +161,16 @@
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER} and is_deleted=FALSE
+  </update>
+  <update id="updateTreasurePoint">
+    UPDATE t_user SET
+    treasure_point=#{newTreasurePoint}
+    WHERE id=#{id}
+    <if test="treasurePoint != null">
+      AND treasure_point=#{treasurePoint}
+    </if>
+    <if test="treasurePoint == null">
+      AND treasure_point is NULL
+    </if>
   </update>
 </mapper>

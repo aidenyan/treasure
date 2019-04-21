@@ -6,6 +6,7 @@ package com.aiden.controller;
 
 import com.aiden.common.utils.PasswrodUtils;
 import com.aiden.common.utils.StringUtils;
+import com.aiden.dto.SendResultDto;
 import com.aiden.dto.UserDetailDto;
 import com.aiden.dto.UserDto;
 import com.aiden.dto.UserResultDto;
@@ -48,6 +49,7 @@ public class LoginController extends BaseController{
 
     private Map<String, String> mobileMp = new HashMap<>();
 
+
     @GetMapping("/send_sms")
     @ResponseBody
     @ApiOperation("发送登录的短信信息")
@@ -56,16 +58,10 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "source", value = "来源", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = true, paramType = "query", dataType = "String"),
     })
-    public ResultModel<Void> sendMobile(String mobile, String source, String deviceId) {
+    public ResultModel<SendResultDto> sendMobile(String mobile, String source, String deviceId) {
         String code = StringUtils.random(6);
-        mobileMp.put(mobile, code);
-        SysConfig sysConfig = sysConfigService.findOne();
-        if (sysConfig == null || org.springframework.util.StringUtils.isEmpty(sysConfig.getSmsContent())) {
-            return new ResultModel<>(ResultCode.ERROR);
-        }
-        String smsContent = sysConfig.getSmsContent();
-        smsContent = smsContent.replace("${code}", code);
         User user = userService.findByMobile(mobile);
+        SendResultDto sendResultDto=new SendResultDto();
         if (user != null) {
             user.setDeviceId(deviceId);
             user.setSource(source);
@@ -83,8 +79,13 @@ public class LoginController extends BaseController{
 
             userService.update(user,userDetail);
         }
-        mobileService.sendMobile(mobile, smsContent);
-        return new ResultModel<>(ResultCode.SUCCESS);
+        if(org.springframework.util.StringUtils.isEmpty(user.getToken())){
+            sendResultDto.setReg(true);
+        }else{
+            sendResultDto.setReg(false);
+        }
+        sendResultDto.setSendResult(mobileService.sendMobile(mobile, code));
+        return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
     }
 
     @GetMapping("/login")
@@ -95,8 +96,10 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "passwrod", value = "密码", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "source", value = "来源", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = false, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
+
     })
-    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String passwrod) {
+    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String passwrod,String invitedCode) {
         User user = userService.findByMobile(mobile);
         if (user == null) {
             return new ResultModel<>(ResultCode.LOGIN_FAIL_USER_NOT_EXIST);
@@ -104,11 +107,35 @@ public class LoginController extends BaseController{
         if (!PasswrodUtils.verify(passwrod.toLowerCase(), key, user.getPassword())) {
             return new ResultModel<>(ResultCode.LOGIN_FAIL_PASSWORD_ERROR);
         }
+        if(!org.springframework.util.StringUtils.isEmpty(user.getToken())&& !org.springframework.util.StringUtils.isEmpty(invitedCode)){
+            return new ResultModel<>(ResultCode.LOGIN_FAIL_PASSWORD_ERROR);
+        }
+        User invitedUser = null;
+        if(org.springframework.util.StringUtils.isEmpty(user.getInvitedCode())&&!org.springframework.util.StringUtils.isEmpty(invitedCode)){
+              UserDetail invitedUserDetail=userDetailService.findByInvitedCode(invitedCode);
+               invitedUser=new User();
+            if(invitedUserDetail==null){
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
+            }
+            User tempInvitedUser=userService.find(invitedUserDetail.getUserId());
+            if(tempInvitedUser==null){
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
+            }
+            if(tempInvitedUser.getId().equals(user.getId())){
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_SELF_ERROR);
+            }
+            invitedUser.setId(tempInvitedUser.getId());
+            invitedUser.setLuckPoin(tempInvitedUser.getLuckPoin()==null?1:tempInvitedUser.getLuckPoin()+1);
+            invitedUser.setIntegral(tempInvitedUser.getIntegral()==null?1:tempInvitedUser.getIntegral()+1);
+            invitedUser.setFindTreasurePoint(tempInvitedUser.getFindTreasurePoint()==null?1:tempInvitedUser.getFindTreasurePoint()+1);
+            invitedUser.setTreasurePoint(tempInvitedUser.getTreasurePoint()==null?1:tempInvitedUser.getTreasurePoint()+1);
+        }
         String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
         User updateUser = new User();
         updateUser.setId(user.getId());
         updateUser.setToken(uuid);
-        userService.update(updateUser);
+        updateUser.setInvitedCode(invitedCode);
+        userService.updateInvition(updateUser,invitedUser);
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(user, userDto);
         UserResultDto userResultDto = new UserResultDto();
