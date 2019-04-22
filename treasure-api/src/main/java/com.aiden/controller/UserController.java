@@ -28,6 +28,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -140,7 +141,7 @@ public class UserController extends BaseController {
     }
 
 
-    @PostMapping("/invite_friend")
+    @GetMapping("/invite_friend")
     @ResponseBody
     @ApiOperation("获取邀请码")
     @ApiImplicitParams({
@@ -158,7 +159,7 @@ public class UserController extends BaseController {
         return new ResultModel<>(ResultCode.SUCCESS, userDetail.getInvitationCode());
     }
 
-    @PostMapping("/user_info")
+    @GetMapping("/user_info")
     @ResponseBody
     @ApiOperation("用户的基本信息")
     @ApiImplicitParams({
@@ -183,7 +184,7 @@ public class UserController extends BaseController {
         return new ResultModel<>(ResultCode.SUCCESS, userResultDto);
     }
 
-    @PostMapping("/balance/page")
+    @GetMapping("/balance/page")
     @ResponseBody
     @ApiOperation("获取钱包信息")
     @ApiImplicitParams({
@@ -227,7 +228,7 @@ public class UserController extends BaseController {
         Page<CashInfoDto, BigDecimal> resultPage = page.convert(cashInfoDtoList, userDetail.getBalanceAmount());
         return new ResultModel<>(ResultCode.SUCCESS, resultPage);
     }
-    @PostMapping("/treasure/page")
+    @GetMapping("/treasure/page")
     @ResponseBody
     @ApiOperation("获取用户宝藏信息")
     @ApiImplicitParams({

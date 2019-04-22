@@ -15,10 +15,7 @@ import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -31,7 +28,7 @@ public class TreasureSysController extends BaseController{
     @Autowired
     private TreasureService treasureService;
 
-    @PostMapping("/treasure_info_list")
+    @GetMapping("/treasure_info_list")
     @ResponseBody
     @ApiOperation("宝藏的类型信息列表")
     @ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String")
