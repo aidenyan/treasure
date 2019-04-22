@@ -33,8 +33,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2019/4/19/019.
  */
-//@Controller("/treasure")
-//@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
+@Controller("/treasure")
+@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
 public class TreasureController {
 
     @Autowired
