@@ -3,17 +3,19 @@ spring:
     name: treasure
   datasource:
     driver-class-name:  com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/mysql?useUnicode=true&characterEncoding=utf-8
+    url: jdbc:mysql://127.0.0.1:3306/treasure?useUnicode=true&characterEncoding=utf-8
     username: root
-    passord: 123456
     type: com.alibaba.druid.pool.DruidDataSource
+    password: wk12345678
 
 server:
   port: 8081
 
 mybatis:
-  type-aliases-package: com.jimmy.entity
+  type-aliases-package: com.aiden.entity
   mapper-locations: classpath:mybatis/mapper/*.xml
+logging:
+  config: classpath:log.xml
 
 
 

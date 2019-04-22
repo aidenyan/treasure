@@ -63,11 +63,12 @@ public class TreasureSysController {
             @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String"),
             @ApiImplicitParam(name = "treasureId", value = "宝藏收藏类型的ID", paramType = "query", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "lat", value = "纬度", paramType = "query", required = true, dataType = "BigDecimal"),
-            @ApiImplicitParam(name = "lng", value = "经度", paramType = "query", required = true, dataType = "BigDecimal")
+            @ApiImplicitParam(name = "lng", value = "经度", paramType = "query", required = true, dataType = "BigDecimal"),
+            @ApiImplicitParam(name = "address", value = "地址详细信息", paramType = "query", required = true, dataType = "String"),
     })
 
     public ResultModel<Void> setSiteInfo(
-            Long treasureId, BigDecimal lat, BigDecimal lng, @RequestHeader(value = "token") String token) {
+            Long treasureId, BigDecimal lat, BigDecimal lng, String address,@RequestHeader(value = "token") String token) {
         if (!token.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
@@ -85,6 +86,7 @@ public class TreasureSysController {
         treasureDistributionInfo.setType(treasureInfo.getType());
         treasureDistributionInfo.setLat(lat);
         treasureDistributionInfo.setLng(lng);
+        treasureDistributionInfo.setAddress(address);
         treasureService.save(treasureDistributionInfo);
         return new ResultModel<>(ResultCode.SUCCESS);
     }

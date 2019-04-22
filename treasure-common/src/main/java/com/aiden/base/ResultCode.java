@@ -17,6 +17,11 @@ public enum ResultCode {
      * 后台数据异常
      */
     ERROR("-2","参数数据错误"),
+
+    /**
+     * 后台数据异常
+     */
+    EXCEPTION("-5","处理异常"),
     /**
      * 无权限
      */
@@ -52,6 +57,11 @@ public enum ResultCode {
     TREASURE_FAIL_COMPLETED("-40004","活动没有启动"),
     TREASURE_FAIL_NOT_EXIST("-40005","宝藏类型不存在"),
     TREASURE_FAIL_NOT_POINT("-40006","用户已经没有寻宝点了"),
+
+    /**
+     * 用户相关信息
+     */
+    USER_INFO_PARAM_BLANK("-50001","上传的参数必须有一个")
     ;
 
     private final String code;

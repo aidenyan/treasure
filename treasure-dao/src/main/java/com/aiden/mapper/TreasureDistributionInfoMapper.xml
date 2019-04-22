@@ -15,9 +15,10 @@
     <result column="create_id" property="createId" jdbcType="BIGINT" />
     <result column="receive_time" property="receiveTime" jdbcType="TIMESTAMP" />
     <result column="type" property="type" jdbcType="TINYINT" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, treasure_id, lat, lng, user_id, is_receive, amount, content, create_type, created_time, 
+    id, treasure_id, lat, lng, user_id,address, is_receive, amount, content, create_type, created_time,
     create_id, receive_time, type
   </sql>
   <select id="findById" resultMap="BaseResultMap" parameterType="java.lang.Long" >
@@ -78,6 +79,9 @@
       <if test="type != null" >
         type,
       </if>
+      <if test="address != null" >
+        address,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -119,64 +123,56 @@
       <if test="type != null" >
         #{type,jdbcType=TINYINT},
       </if>
+      <if test="address != null" >
+        #{address},
+      </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.aiden.entity.TreasureDistributionInfo" >
-    update t_treasure_distribution_info
-    <set >
-      <if test="treasureId != null" >
-        treasure_id = #{treasureId,jdbcType=BIGINT},
+
+  <select id="countUserTreasure" resultType="java.lang.Integer">
+      SELECT
+          count(ttdi.id)
+      FROM
+          t_treasure_distribution_info ttdi
+      JOIN t_treasure_info tti ON ttdi.treasure_id = tti.id
+      WHERE
+          ttdi.user_id = #{userId}
+      <if test=" isReceive != null">
+        AND ttdi.is_receive = #{isReceive}
       </if>
-      <if test="lat != null" >
-        lat = #{lat,jdbcType=DECIMAL},
-      </if>
-      <if test="lng != null" >
-        lng = #{lng,jdbcType=DECIMAL},
-      </if>
-      <if test="userId != null" >
-        user_id = #{userId,jdbcType=BIGINT},
-      </if>
-      <if test="isReceive != null" >
-        is_receive = #{isReceive,jdbcType=TINYINT},
-      </if>
-      <if test="amount != null" >
-        amount = #{amount,jdbcType=DECIMAL},
-      </if>
-      <if test="content != null" >
-        content = #{content,jdbcType=VARCHAR},
-      </if>
-      <if test="createType != null" >
-        create_type = #{createType,jdbcType=TINYINT},
-      </if>
-      <if test="createdTime != null" >
-        created_time = #{createdTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="createId != null" >
-        create_id = #{createId,jdbcType=BIGINT},
-      </if>
-      <if test="receiveTime != null" >
-        receive_time = #{receiveTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="type != null" >
-        type = #{type,jdbcType=TINYINT},
-      </if>
-    </set>
-    where id = #{id,jdbcType=BIGINT}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.aiden.entity.TreasureDistributionInfo" >
-    update t_treasure_distribution_info
-    set treasure_id = #{treasureId,jdbcType=BIGINT},
-      lat = #{lat,jdbcType=DECIMAL},
-      lng = #{lng,jdbcType=DECIMAL},
-      user_id = #{userId,jdbcType=BIGINT},
-      is_receive = #{isReceive,jdbcType=TINYINT},
-      amount = #{amount,jdbcType=DECIMAL},
-      content = #{content,jdbcType=VARCHAR},
-      create_type = #{createType,jdbcType=TINYINT},
-      created_time = #{createdTime,jdbcType=TIMESTAMP},
-      create_id = #{createId,jdbcType=BIGINT},
-      receive_time = #{receiveTime,jdbcType=TIMESTAMP},
-      type = #{type,jdbcType=VARCHAR}
-    where id = #{id,jdbcType=BIGINT}
-  </update>
+  </select>
+
+  <resultMap id="userTreasure" type="com.aiden.entity.UserTreasure">
+    <result column="address" property="address"/>
+    <result column="amount" property="amount" />
+    <result column="is_receive" property="isReceive"/>
+    <result column="treasure_name" property="treasureName" />
+    <result column="type" property="type"/>
+    <result column="level" property="level" />
+    <result column="content" property="content" />
+    <result column="receive_time" property="receiveTime" />
+  </resultMap>
+  <select id="listUserTreasure"  resultMap="userTreasure">
+    SELECT
+    ttdi.address,
+    ttdi.amount,
+    ttdi.is_receive,
+    tti.treasure_name,
+    tti.type,
+    tti.`level`,
+    ttdi.receive_time,
+    ttdi.content
+    FROM
+    t_treasure_distribution_info ttdi
+    JOIN t_treasure_info tti ON ttdi.treasure_id = tti.id
+    WHERE
+    ttdi.user_id = #{userId}
+    <if test=" isReceive != null">
+      AND ttdi.is_receive = #{isReceive}
+    </if>
+    ORDER BY
+    ttdi.receive_time DESC
+    limit #{start},#{pageSize}
+  </select>
+
 </mapper>

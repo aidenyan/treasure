@@ -19,6 +19,8 @@ public class UserDetailDto {
     @ApiModelProperty("头部图片")
     private String headerUrl;
 
+    private final static String HTTP_URL="http://47.98.237.45:81/";
+
     public Byte getSex() {
         return sex;
     }
@@ -44,6 +46,9 @@ public class UserDetailDto {
     }
 
     public String getHeaderUrl() {
+        if(headerUrl!=null&&!headerUrl.trim().startsWith("http")){
+            return HTTP_URL+headerUrl;
+        }
         return headerUrl;
     }
 

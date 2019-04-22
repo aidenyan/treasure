@@ -29,6 +29,15 @@ public class TreasureDistributionInfo {
     private Date receiveTime;
 
     private Integer type;
+    private String address;
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
 
     public Long getId() {
         return id;

@@ -41,8 +41,6 @@ public class LoginController extends BaseController{
     private UserService userService;
     @Autowired
     private MobileService mobileService;
-    @Autowired
-    private SysConfigService sysConfigService;
 
     @Autowired
     private UserDetailService userDetailService;
@@ -98,7 +96,6 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "source", value = "来源", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
-
     })
     public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String passwrod,String invitedCode) {
         User user = userService.findByMobile(mobile);
@@ -136,6 +133,12 @@ public class LoginController extends BaseController{
         updateUser.setId(user.getId());
         updateUser.setToken(uuid);
         updateUser.setInvitedCode(invitedCode);
+        if(!org.springframework.util.StringUtils.isEmpty(source)){
+            updateUser.setSource(source);
+        }
+        if(!org.springframework.util.StringUtils.isEmpty(deviceId)){
+            updateUser.setDeviceId(deviceId);
+        }
         userService.updateInvition(updateUser,invitedUser);
         UserDto userDto = new UserDto();
         BeanUtils.copyProperties(user, userDto);

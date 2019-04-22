@@ -1,13 +1,11 @@
 package com.aiden.service.impl;
 
+import com.aiden.base.Page;
 import com.aiden.common.enums.BalanceTypeEnum;
 import com.aiden.common.enums.StatusEnum;
 import com.aiden.common.enums.TreasureLevelEnum;
 import com.aiden.common.utils.DateUtils;
-import com.aiden.entity.CashInfo;
-import com.aiden.entity.TreasureDistributionInfo;
-import com.aiden.entity.TreasureInfo;
-import com.aiden.entity.UnreceiveTreasure;
+import com.aiden.entity.*;
 import com.aiden.exception.ServiceException;
 import com.aiden.exception.UpdateException;
 import com.aiden.mapper.TreasureDistributionInfoMapper;
@@ -94,6 +92,23 @@ public class TreasureServiceImpl implements TreasureService {
         Assert.notNull(lat);
         Assert.notNull(lng);
         return treasureInfoMapper.findUnReceiveTreasure(lat, lng, distance);
+    }
+
+    @Override
+    public Page<UserTreasure, Void> pageUserTreasure(Long userId, Boolean isReceive, Integer currentPage, Integer pageSize) {
+        Assert.notNull(pageSize);
+        Assert.notNull(currentPage);
+        Assert.notNull(userId);
+      Integer total=  treasureDistributionInfoMapper.countUserTreasure(userId,isReceive);
+        Page<UserTreasure,Void> page=new Page<>();
+        page.setTotal(total);
+        page.setCurrentPage(currentPage);
+        page.setPageSize(pageSize);
+        if(total==0){
+            return page;
+        }
+        page.setResult(treasureDistributionInfoMapper.listUserTreasure(userId,isReceive,(page.getCurrentPage()-1)*page.getPageSize(),page.getPageSize()));
+        return page;
     }
 
     @Transactional(rollbackFor = {Exception.class})

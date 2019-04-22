@@ -1,9 +1,11 @@
 package com.aiden.service;
 
+import com.aiden.base.Page;
 import com.aiden.common.enums.TreasureLevelEnum;
 import com.aiden.entity.TreasureDistributionInfo;
 import com.aiden.entity.TreasureInfo;
 import com.aiden.entity.UnreceiveTreasure;
+import com.aiden.entity.UserTreasure;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
@@ -33,5 +35,8 @@ public interface TreasureService {
 
 
     List<UnreceiveTreasure> findUnReceiveTreasure(BigDecimal lat, BigDecimal lng,BigDecimal distance);
+
+
+    Page<UserTreasure,Void> pageUserTreasure( Long userId,  Boolean isReceive, Integer currentPage,Integer pageSize);
 
 }
