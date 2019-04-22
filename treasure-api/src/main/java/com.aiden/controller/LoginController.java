@@ -5,6 +5,7 @@ package com.aiden.controller;
  */
 
 import com.aiden.common.utils.DateUtils;
+import com.aiden.common.utils.MobileUtils;
 import com.aiden.common.utils.PasswrodUtils;
 import com.aiden.common.utils.StringUtils;
 import com.aiden.dto.SendResultDto;
@@ -64,7 +65,12 @@ public class LoginController extends BaseController{
         if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
-        String code = StringUtils.random(6);
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile),"手机号码不能未空");
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(source),"来源不能未空");
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(deviceId),"机器码不能未空");
+        veriftyTrue(MobileUtils.isPhone(mobile),"手机号不正确");
+
+        String code = StringUtils.randomNum(6);
         SendResultDto sendResultDto=new SendResultDto();
         User user = userService.findByMobile(mobile);
         UserDetail userDetail=null;
@@ -114,6 +120,8 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
     })
     public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String password,String invitedCode) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile),"手机号码不能未空");
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(password),"密码不能未空");
         User user = userService.findByMobile(mobile);
         if (user == null) {
             return new ResultModel<>(ResultCode.LOGIN_FAIL_USER_NOT_EXIST);
@@ -178,6 +186,7 @@ public class LoginController extends BaseController{
 
     })
     public ResultModel<String> findCode(String mobile) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile),"手机号码不能未空");
         return new ResultModel<>(ResultCode.SUCCESS, mobileMp.get(mobile));
     }
 }

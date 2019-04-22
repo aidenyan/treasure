@@ -8,6 +8,7 @@ import java.util.Random;
 public class StringUtils {
 
     public static final char[] BASE_CHAR = {'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p', 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
+    public static final char[] BASE_NUM_CHAR = {'1', '2', '3', '4', '5', '6', '7', '8', '9', '0'};
 
     /**
      * 随机产生对应位数的随机码
@@ -28,7 +29,26 @@ public class StringUtils {
         return result.toString().toLowerCase();
     }
 
+    /**
+     * 随机产生对应位数的随机码
+     *
+     * @param length
+     * @return
+     */
+    public static String randomNum(int length) {
+        Random random = new Random();
+        StringBuffer result=new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int randomInt = random.nextInt();
+            if(randomInt<0){
+                randomInt=0-randomInt;
+            }
+            result.append(BASE_NUM_CHAR[randomInt%BASE_NUM_CHAR.length]);
+        }
+        return result.toString().toLowerCase();
+    }
+
    public static void main(String[]arg){
-        System.out.println(random(32));
+        System.out.println(randomNum(6));
    }
 }

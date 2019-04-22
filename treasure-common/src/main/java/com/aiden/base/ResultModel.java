@@ -25,7 +25,10 @@ public class ResultModel<T> implements Serializable {
             this.message = resultCode.getMessage();
         }
     }
-
+    public ResultModel(String code,String message) {
+        this.code = code;
+        this.message =message;
+    }
     public ResultModel(ResultCode resultCode, T data) {
         if (resultCode != null) {
             this.code = resultCode.getCode();

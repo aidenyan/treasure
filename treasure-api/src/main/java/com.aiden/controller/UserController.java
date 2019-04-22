@@ -72,7 +72,7 @@ public class UserController extends BaseController {
     })
     public ResultModel<Void> updateUser(@ApiParam(value = "上传头像") MultipartFile multipartFile,
                                         String nickName, Byte sex, String birthDay, String userDesc, @RequestHeader(value = "token") String token) {
-
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
         if(multipartFile==null&&StringUtils.isEmpty(nickName)&&sex==null&&StringUtils.isEmpty(birthDay)&&StringUtils.isEmpty(userDesc)){
             return new ResultModel<>(ResultCode.USER_INFO_PARAM_BLANK);
         }
@@ -126,6 +126,10 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
     })
     public ResultModel<Void> updatePassword(String password, String newPassword, @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(newPassword),"新密码不能未空");
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(password),"老密码不能未空");
+
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
@@ -148,6 +152,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
     })
     public ResultModel<String> inviteFriend( @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
@@ -166,6 +171,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
     })
     public ResultModel<UserResultDto> userInfo( @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
@@ -194,6 +200,7 @@ public class UserController extends BaseController {
 
     })
     public ResultModel<Page<CashInfoDto, BigDecimal>> pageBalance(Integer pageSize, Integer currentPage, @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
@@ -238,6 +245,7 @@ public class UserController extends BaseController {
             @ApiImplicitParam(name = "isReceive", value = "是否中奖", paramType = "query", dataType = "Boolean"),
     })
     public ResultModel<Page<UserTreasureDto, Void>> page(Boolean isReceive,Integer pageSize, Integer currentPage, @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();

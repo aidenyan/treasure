@@ -33,9 +33,9 @@ import java.util.List;
 /**
  * Created by Administrator on 2019/4/19/019.
  */
-@Controller("/treasure")
-@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
-public class TreasureController {
+//@Controller("/treasure")
+//@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
+public class TreasureController extends BaseController{
 
     @Autowired
     private UserService userService;
@@ -62,6 +62,10 @@ public class TreasureController {
     })
     public ResultModel<List<UnreceiveTreasureDto>> listUnreceiveTreasure(BigDecimal lat, BigDecimal lng, BigDecimal distance,
                                                                          @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
+        veriftyTrue(distance!=null,"搜索范围的距离不能未空");
+        veriftyTrue(lat!=null,"纬度不能未空");
+        veriftyTrue(lng!=null,"经度不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
@@ -115,6 +119,8 @@ public class TreasureController {
             @ApiImplicitParam(name = "treasureDistributionId", value = "宝藏收藏的ID", paramType = "query", required = true, dataType = "String")
     })
     public ResultModel<TreasureOpenResultDto> openTreasure(Long treasureDistributionId, @RequestHeader(value = "token") String token) {
+        veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token),"token不能未空");
+        veriftyTrue(treasureDistributionId!=null,"搜宝藏收藏的ID不能未空");
         User user = userService.findToken(token);
         if (user == null) {
             throw new UnloginException();
