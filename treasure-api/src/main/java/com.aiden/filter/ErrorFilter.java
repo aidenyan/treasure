@@ -34,16 +34,8 @@ public class ErrorFilter implements Filter {
         String url = request.getRequestURI();
         try {
             filterChain.doFilter(servletRequest, response);
-        }catch (ParamException e){
-            logger.error("controller is error", e);
-            response.setCharacterEncoding("UTF-8");
-            response.setContentType("application/json; charset=utf-8");
-            OutputStream out = response.getOutputStream();
-            ResultModel<Void> resultModel = new ResultModel<>("-6",e.getMessage());
-            out.write(JSON.toJSONString(resultModel).getBytes());
-            out.flush();
-            out.close();
         }catch (Exception e) {
+
             logger.error("controller is error", e);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
