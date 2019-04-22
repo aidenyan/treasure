@@ -57,24 +57,24 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "source", value = "来源", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
+            @ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String")
     })
-    public ResultModel<SendResultDto> sendMobile(String mobile, String source, String deviceId,@RequestHeader(value = "token") String token) {
-        if (!token.equals(AUTHOR_KEY)) {
+    public ResultModel<SendResultDto> sendMobile(String mobile, String source, String deviceId,@RequestHeader(value = "sysToken") String sysToken) {
+        if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
         String code = StringUtils.random(6);
-        User user = userService.findByMobile(mobile);
         SendResultDto sendResultDto=new SendResultDto();
+        User user = userService.findByMobile(mobile);
+        UserDetail userDetail=null;
         if (user != null) {
             if(user.getSendCreated()!=null&&(user.getSendCreated()+60*1000L)>= DateUtils.now().getTime()){
-                return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_SMS_ERROR);
             }
             user.setSendCreated(DateUtils.now().getTime());
             user.setDeviceId(deviceId);
             user.setSource(source);
             user.setPassword(PasswrodUtils.md5(code, key));
-            userService.update(user);
         } else {
             user = new User();
             user.setSendCreated(DateUtils.now().getTime());
@@ -83,17 +83,22 @@ public class LoginController extends BaseController{
             user.setSource(source);
             user.setPassword(PasswrodUtils.md5(code, key));
             user.setNickName(mobile);
-            UserDetail userDetail=new UserDetail();
+            userDetail=new UserDetail();
             userDetail.setInvitationCode(userDetailService.findInvitationCode());
-            userService.update(user,userDetail);
         }
+        boolean sendResult=mobileService.sendMobile(mobile, code);
+        sendResultDto.setSendResult(sendResult);
+        if(!sendResult){
+            return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
+        }
+        userService.update(user,userDetail);
         if(org.springframework.util.StringUtils.isEmpty(user.getToken())){
             sendResultDto.setReg(true);
         }else{
             sendResultDto.setReg(false);
         }
         mobileMp.put(mobile,code);
-        sendResultDto.setSendResult(mobileService.sendMobile(mobile, code));
+
         return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
     }
 

@@ -28,20 +28,15 @@ import java.util.List;
 @Api(value = "treasure_sys", tags = "TreasureSysController", description = "宝藏系统信息设置")
 public class TreasureSysController extends BaseController{
 
-
-
-
     @Autowired
     private TreasureService treasureService;
 
-    @Autowired
-    private SysConfigService sysConfigService;
     @PostMapping("/treasure_info_list")
     @ResponseBody
     @ApiOperation("宝藏的类型信息列表")
-    @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
-    public ResultModel<List<TreasureInfoDto>> listTreasureInfo(@RequestHeader(value = "token") String token) {
-        if (!token.equals(AUTHOR_KEY)) {
+    @ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String")
+    public ResultModel<List<TreasureInfoDto>> listTreasureInfo(@RequestHeader(value = "sysToken") String sysToken) {
+        if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
         final List<TreasureInfo> treasureInfoList = treasureService.findAll();
@@ -60,7 +55,7 @@ public class TreasureSysController extends BaseController{
     @ResponseBody
     @ApiOperation("宝藏位置信息设置")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String"),
             @ApiImplicitParam(name = "treasureId", value = "宝藏收藏类型的ID", paramType = "query", required = true, dataType = "Long"),
             @ApiImplicitParam(name = "lat", value = "纬度", paramType = "query", required = true, dataType = "BigDecimal"),
             @ApiImplicitParam(name = "lng", value = "经度", paramType = "query", required = true, dataType = "BigDecimal"),
@@ -68,8 +63,8 @@ public class TreasureSysController extends BaseController{
     })
 
     public ResultModel<Void> setSiteInfo(
-            Long treasureId, BigDecimal lat, BigDecimal lng, String address,@RequestHeader(value = "token") String token) {
-        if (!token.equals(AUTHOR_KEY)) {
+            Long treasureId, BigDecimal lat, BigDecimal lng, String address,@RequestHeader(value = "sysToken") String sysToken) {
+        if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
         TreasureInfo treasureInfo = treasureService.findTreasureInfo(treasureId);
@@ -95,9 +90,9 @@ public class TreasureSysController extends BaseController{
     @PostMapping("/set_info")
     @ResponseBody
     @ApiOperation("宝藏类型信息设置")
-    @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
-    public ResultModel<Void> set(@RequestBody TreasureInfoDto treasureInfoDto, @RequestHeader(value = "token") String token) {
-        if (!token.equals(AUTHOR_KEY)) {
+    @ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String")
+    public ResultModel<Void> set(@RequestBody TreasureInfoDto treasureInfoDto, @RequestHeader(value = "sysToken") String sysToken) {
+        if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
         }
         TreasureInfo treasureInfo = new TreasureInfo();

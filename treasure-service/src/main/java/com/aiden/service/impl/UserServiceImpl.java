@@ -101,8 +101,8 @@ public class UserServiceImpl implements UserService {
         }
         if (userDetail != null) {
             userDetail.setUserId(user.getId());
+            userDetailService.save(userDetail);
         }
-        userDetailService.save(userDetail);
     }
 
     @Override
