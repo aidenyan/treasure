@@ -27,7 +27,7 @@ public class TreasureInfoDto {
     private BigDecimal amount;
     @ApiModelProperty("结束时间")
     private Date endTime;
-    @ApiModelProperty("中奖的概率，百分制")
+    @ApiModelProperty("中奖的概率，百分制,比如100，表示百分百中奖，1表示百分之一")
     private BigDecimal probability;
 
 

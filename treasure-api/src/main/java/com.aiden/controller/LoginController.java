@@ -108,17 +108,17 @@ public class LoginController extends BaseController{
     @ApiOperation("登录信息")
     @ApiImplicitParams({
             @ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "passwrod", value = "密码", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "source", value = "来源", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
     })
-    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String passwrod,String invitedCode) {
+    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String password,String invitedCode) {
         User user = userService.findByMobile(mobile);
         if (user == null) {
             return new ResultModel<>(ResultCode.LOGIN_FAIL_USER_NOT_EXIST);
         }
-        if (!PasswrodUtils.verify(passwrod.toLowerCase(), key, user.getPassword())) {
+        if (!PasswrodUtils.verify(password.toLowerCase(), key, user.getPassword())) {
             return new ResultModel<>(ResultCode.LOGIN_FAIL_PASSWORD_ERROR);
         }
         if(!org.springframework.util.StringUtils.isEmpty(user.getToken())&& !org.springframework.util.StringUtils.isEmpty(invitedCode)){
@@ -160,6 +160,7 @@ public class LoginController extends BaseController{
         BeanUtils.copyProperties(user, userDto);
         UserResultDto userResultDto = new UserResultDto();
         userResultDto.setUserDto(userDto);
+
         UserDetail userDetail = userDetailService.findByUserId(user.getId());
         if (userDetail != null) {
             UserDetailDto userDetailDto = new UserDetailDto();
