@@ -84,6 +84,7 @@ public class LoginController extends BaseController{
         }else{
             sendResultDto.setReg(false);
         }
+        mobileMp.put(mobile,code);
         sendResultDto.setSendResult(mobileService.sendMobile(mobile, code));
         return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
     }
