@@ -25,7 +25,17 @@ public class User {
 
     private String invitedCode;
 
+    private Long sendCreated;
+
     private Boolean isDeleted=false;
+
+    public Long getSendCreated() {
+        return sendCreated;
+    }
+
+    public void setSendCreated(Long sendCreated) {
+        this.sendCreated = sendCreated;
+    }
 
     public Boolean getIsDeleted() {
         return isDeleted;

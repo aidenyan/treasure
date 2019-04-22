@@ -15,10 +15,11 @@
     <result column="luck_poin" property="luckPoin" jdbcType="INTEGER" />
     <result column="Invited_code" property="invitedCode" jdbcType="VARCHAR" />
     <result column="is_deleted" property="isDeleted" jdbcType="TINYINT" />
+    <result column="send_created" property="sendCreated" jdbcType="BIGINT" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, nick_name, mobile, password, token, source, device_id, integral,
-    find_treasure_point, treasure_point, luck_poin, Invited_code,is_deleted
+    find_treasure_point, treasure_point, luck_poin, Invited_code,is_deleted,send_created
   </sql>
   <select id="find" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -80,6 +81,9 @@
       <if test="isDeleted != null" >
         is_deleted
       </if>
+      <if test="sendCreated != null" >
+        send_created
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -121,6 +125,9 @@
       <if test="isDeleted != null" >
         #{isDeleted,jdbcType=VARCHAR},
       </if>
+      <if test="sendCreated != null" >
+        #{sendCreated}
+      </if>
     </trim>
   </insert>
   <update id="update" parameterType="com.aiden.entity.User" >
@@ -158,6 +165,9 @@
       </if>
       <if test="invitedCode != null" >
         Invited_code = #{invitedCode,jdbcType=VARCHAR},
+      </if>
+      <if test="sendCreated != null" >
+        send_created= #{sendCreated}
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER} and is_deleted=FALSE

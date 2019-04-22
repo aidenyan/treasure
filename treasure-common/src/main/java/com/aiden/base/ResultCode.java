@@ -34,6 +34,7 @@ public enum ResultCode {
     LOGIN_FAIL_INVITED_ERROR("-20003","请填写正确的邀请码"),
     LOGIN_FAIL_INVITED_SELF_ERROR("-20004","邀请码不能填写自己的"),
     LOGIN_FAIL_INVITED_USER_ERROR("-20005","该用户非新注册用户"),
+    LOGIN_FAIL_SMS_ERROR("-20006","请距离上次发送时间距离60s后在发"),
     /**
      *
      */

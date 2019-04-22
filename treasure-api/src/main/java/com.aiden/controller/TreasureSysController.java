@@ -26,8 +26,8 @@ import java.util.List;
 
 @Controller("/sys/treasure")
 @Api(value = "treasure_sys", tags = "TreasureSysController", description = "宝藏系统信息设置")
-public class TreasureSysController {
-    public static final String AUTHOR_KEY = "5npkwbx2luq0c8gchdc9tasaf9v9wj6f";
+public class TreasureSysController extends BaseController{
+
 
 
 

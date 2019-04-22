@@ -4,6 +4,7 @@ package com.aiden.controller;
  * Created by Administrator on 2019/4/19/019.
  */
 
+import com.aiden.common.utils.DateUtils;
 import com.aiden.common.utils.PasswrodUtils;
 import com.aiden.common.utils.StringUtils;
 import com.aiden.dto.SendResultDto;
@@ -27,6 +28,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -55,18 +57,27 @@ public class LoginController extends BaseController{
             @ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "source", value = "来源", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
     })
-    public ResultModel<SendResultDto> sendMobile(String mobile, String source, String deviceId) {
+    public ResultModel<SendResultDto> sendMobile(String mobile, String source, String deviceId,@RequestHeader(value = "token") String token) {
+        if (!token.equals(AUTHOR_KEY)) {
+            return new ResultModel<>(ResultCode.AUTHOR);
+        }
         String code = StringUtils.random(6);
         User user = userService.findByMobile(mobile);
         SendResultDto sendResultDto=new SendResultDto();
         if (user != null) {
+            if(user.getSendCreated()!=null&&(user.getSendCreated()+60*1000L)>= DateUtils.now().getTime()){
+                return new ResultModel<>(ResultCode.SUCCESS,sendResultDto);
+            }
+            user.setSendCreated(DateUtils.now().getTime());
             user.setDeviceId(deviceId);
             user.setSource(source);
             user.setPassword(PasswrodUtils.md5(code, key));
             userService.update(user);
         } else {
             user = new User();
+            user.setSendCreated(DateUtils.now().getTime());
             user.setMobile(mobile);
             user.setDeviceId(deviceId);
             user.setSource(source);
@@ -74,7 +85,6 @@ public class LoginController extends BaseController{
             user.setNickName(mobile);
             UserDetail userDetail=new UserDetail();
             userDetail.setInvitationCode(userDetailService.findInvitationCode());
-
             userService.update(user,userDetail);
         }
         if(org.springframework.util.StringUtils.isEmpty(user.getToken())){
