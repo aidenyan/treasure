@@ -126,23 +126,23 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
     })
-    public ResultModel<Boolean> reg(String mobile, String verifyCode, String password, String invitedCode) {
+    public ResultModel<String> reg(String mobile, String verifyCode, String password, String invitedCode) {
         try {
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile), "手机号码不能未空");
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(password), "密码不能未空");
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(verifyCode), "验证码不能未空");
             User user = userService.findByMobile(mobile);
             if (user == null) {
-                return new ResultModel<>(ResultCode.LOGIN_FAIL_SEND_CODE,false);
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_SEND_CODE);
             }
             if(user.getVerifySendDate()==null||DateUtils.now().getTime()-user.getVerifySendDate().getTime()>VERFIY_LONG){
-                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_DATE_ERROR,false);
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_DATE_ERROR);
             }
             if (!PasswrodUtils.verify(verifyCode.toLowerCase(), key, user.getVerifyCode())) {
-                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_CODE_ERROR,false);
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_CODE_ERROR);
             }
             if (!org.springframework.util.StringUtils.isEmpty(user.getInvitedCode())) {
-                return new ResultModel<>(ResultCode.LOGIN_FAIL_ALREADY_INVITED_ERROR,false);
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_ALREADY_INVITED_ERROR);
             }
             User updateUser=new User();
             updateUser.setId(user.getId());
@@ -152,14 +152,14 @@ public class LoginController extends BaseController {
                 UserDetail invitedUserDetail = userDetailService.findByInvitedCode(invitedCode);
                 invitedUser = new User();
                 if (invitedUserDetail == null) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR,false);
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
                 }
                 User tempInvitedUser = userService.find(invitedUserDetail.getUserId());
                 if (tempInvitedUser == null) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR,false);
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
                 }
                 if (tempInvitedUser.getId().equals(user.getId())) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_SELF_ERROR,false);
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_SELF_ERROR);
                 }
                 invitedUser.setId(tempInvitedUser.getId());
                 invitedUser.setLuckPoin(tempInvitedUser.getLuckPoin() == null ? 1 : tempInvitedUser.getLuckPoin() + 1);
@@ -168,9 +168,10 @@ public class LoginController extends BaseController {
                 invitedUser.setTreasurePoint(tempInvitedUser.getTreasurePoint() == null ? 1 : tempInvitedUser.getTreasurePoint() + 1);
             }
             updateUser.setInvitedCode(invitedCode);
+            String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
+             updateUser.setToken(uuid);
             userService.updateInvition(updateUser, invitedUser);
-            return new ResultModel<>(ResultCode.SUCCESS,true);
-
+            return new ResultModel<>(ResultCode.SUCCESS,uuid);
         } catch (ParamException e) {
             return new ResultModel<>("-6", e.getMessage());
         }
