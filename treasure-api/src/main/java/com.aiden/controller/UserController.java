@@ -65,16 +65,19 @@ public class UserController extends BaseController {
     @ResponseBody
     @ApiOperation("更新用户信息")
     @ApiImplicitParams({
-            @ApiImplicitParam(name = "nickName", value = "昵称", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "sex", value = "性别", paramType = "query", dataType = "Byte"),
-            @ApiImplicitParam(name = "birthDay", value = "生日", paramType = "query", dataType = "String"),
-            @ApiImplicitParam(name = "userDesc", value = "描述", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "nickName", value = "昵称（长度不超过50）", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "sex", value = "性别,0:女，1:男生", paramType = "query", dataType = "Byte"),
+            @ApiImplicitParam(name = "birthDay", value = "生日（yyyy-MM-dd）", paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "userDesc", value = "描述（长度不超过255）", paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
     })
     public ResultModel<Void> updateUser(@ApiParam(value = "上传头像") MultipartFile multipartFile,
                                         String nickName, Byte sex, String birthDay, String userDesc, @RequestHeader(value = "token") String token) {
         try {
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token), "token不能未空");
+            veriftyTrue(sex==null||sex.equals(Byte.valueOf("0"))||sex.equals(Byte.valueOf("1")), "sex只能为0或者1");
+            veriftyTrue(nickName==null||nickName.length()<50,"长度不能超过50");
+            veriftyTrue(birthDay==null||birthDay.length()<20,"长度不能超过50");
             if (multipartFile == null && StringUtils.isEmpty(nickName) && sex == null && StringUtils.isEmpty(birthDay) && StringUtils.isEmpty(userDesc)) {
                 return new ResultModel<>(ResultCode.USER_INFO_PARAM_BLANK);
             }
@@ -147,7 +150,7 @@ public class UserController extends BaseController {
             User updateUser = new User();
             updateUser.setId(user.getId());
             updateUser.setPassword(PasswrodUtils.md5(newPassword.toLowerCase(), key));
-            userService.update(user);
+            userService.update(updateUser);
             return new ResultModel<>(ResultCode.SUCCESS);
         } catch (ParamException e) {
             return new ResultModel<>("-6", e.getMessage());

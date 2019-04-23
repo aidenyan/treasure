@@ -35,7 +35,6 @@ public class ErrorFilter implements Filter {
         try {
             filterChain.doFilter(servletRequest, response);
         }catch (Exception e) {
-
             logger.error("controller is error", e);
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json; charset=utf-8");
