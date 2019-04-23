@@ -16,10 +16,12 @@ import com.aiden.service.SysConfigService;
 import com.aiden.service.TreasureService;
 import com.aiden.service.UserDetailService;
 import com.aiden.service.UserService;
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -32,8 +34,8 @@ import java.util.List;
 /**
  * Created by Administrator on 2019/4/19/019.
  */
-//@Controller("/treasure")
-//@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
+@Controller("/treasure")
+@Api(value = "treasure", tags = "TreasureController", description = "挖宝信息")
 public class TreasureController extends BaseController {
 
     @Autowired

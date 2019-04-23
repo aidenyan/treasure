@@ -1,5 +1,7 @@
 package com.aiden.entity;
 
+import java.util.Date;
+
 public class User {
     private Long id;
 
@@ -28,6 +30,25 @@ public class User {
     private Long sendCreated;
 
     private Boolean isDeleted=false;
+
+    private String verifyCode;
+    private Date verifySendDate;
+
+    public String getVerifyCode() {
+        return verifyCode;
+    }
+
+    public void setVerifyCode(String verifyCode) {
+        this.verifyCode = verifyCode;
+    }
+
+    public Date getVerifySendDate() {
+        return verifySendDate;
+    }
+
+    public void setVerifySendDate(Date verifySendDate) {
+        this.verifySendDate = verifySendDate;
+    }
 
     public Long getSendCreated() {
         return sendCreated;

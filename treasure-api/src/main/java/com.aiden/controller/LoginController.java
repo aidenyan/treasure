@@ -48,8 +48,9 @@ public class LoginController extends BaseController {
     @Autowired
     private UserDetailService userDetailService;
 
-    private Map<String, String> mobileMp = new HashMap<>();
+    public final static Long VERFIY_LONG=30*60*1000L;
 
+    private Map<String, String> mobileMp = new HashMap<>();
 
     @PostMapping("/send_sms")
     @ResponseBody
@@ -74,6 +75,9 @@ public class LoginController extends BaseController {
             SendResultDto sendResultDto = new SendResultDto();
             User user = userService.findByMobile(mobile);
             UserDetail userDetail = null;
+            if (user!=null&&!org.springframework.util.StringUtils.isEmpty(user.getPassword())) {
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_ALREADY_REG);
+            }
             if (user != null) {
                 if (user.getSendCreated() != null && (user.getSendCreated() + 60 * 1000L) >= DateUtils.now().getTime()) {
                     return new ResultModel<>(ResultCode.LOGIN_FAIL_SMS_ERROR);
@@ -81,14 +85,16 @@ public class LoginController extends BaseController {
                 user.setSendCreated(DateUtils.now().getTime());
                 user.setDeviceId(deviceId);
                 user.setSource(source);
-                user.setPassword(PasswrodUtils.md5(code, key));
+                user.setVerifyCode(PasswrodUtils.md5(code, key));
+                user.setVerifySendDate(DateUtils.now());
             } else {
                 user = new User();
                 user.setSendCreated(DateUtils.now().getTime());
                 user.setMobile(mobile);
                 user.setDeviceId(deviceId);
                 user.setSource(source);
-                user.setPassword(PasswrodUtils.md5(code, key));
+                user.setVerifyCode(PasswrodUtils.md5(code, key));
+                user.setVerifySendDate(DateUtils.now());
                 user.setNickName(mobile);
                 userDetail = new UserDetail();
                 userDetail.setInvitationCode(userDetailService.findInvitationCode());
@@ -111,6 +117,66 @@ public class LoginController extends BaseController {
         }
     }
 
+    @PostMapping("/reg")
+    @ResponseBody
+    @ApiOperation("注册信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "mobile", value = "手机号码", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "password", value = "密码", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "verifyCode", value = "验证码", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
+    })
+    public ResultModel<Boolean> reg(String mobile, String verifyCode, String password, String invitedCode) {
+        try {
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile), "手机号码不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(password), "密码不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(verifyCode), "验证码不能未空");
+            User user = userService.findByMobile(mobile);
+            if (user == null) {
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_SEND_CODE,false);
+            }
+            if(user.getVerifySendDate()==null||DateUtils.now().getTime()-user.getVerifySendDate().getTime()>VERFIY_LONG){
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_DATE_ERROR,false);
+            }
+            if (!PasswrodUtils.verify(verifyCode.toLowerCase(), key, user.getVerifyCode())) {
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_VERIFY_CODE_ERROR,false);
+            }
+            if (!org.springframework.util.StringUtils.isEmpty(user.getInvitedCode())) {
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_ALREADY_INVITED_ERROR,false);
+            }
+            User updateUser=new User();
+            updateUser.setId(user.getId());
+            updateUser.setPassword(  PasswrodUtils.md5(password,key));
+            User invitedUser = null;
+            if (org.springframework.util.StringUtils.isEmpty(user.getInvitedCode()) && !org.springframework.util.StringUtils.isEmpty(invitedCode)) {
+                UserDetail invitedUserDetail = userDetailService.findByInvitedCode(invitedCode);
+                invitedUser = new User();
+                if (invitedUserDetail == null) {
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR,false);
+                }
+                User tempInvitedUser = userService.find(invitedUserDetail.getUserId());
+                if (tempInvitedUser == null) {
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR,false);
+                }
+                if (tempInvitedUser.getId().equals(user.getId())) {
+                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_SELF_ERROR,false);
+                }
+                invitedUser.setId(tempInvitedUser.getId());
+                invitedUser.setLuckPoin(tempInvitedUser.getLuckPoin() == null ? 1 : tempInvitedUser.getLuckPoin() + 1);
+                invitedUser.setIntegral(tempInvitedUser.getIntegral() == null ? 1 : tempInvitedUser.getIntegral() + 1);
+                invitedUser.setFindTreasurePoint(tempInvitedUser.getFindTreasurePoint() == null ? 1 : tempInvitedUser.getFindTreasurePoint() + 1);
+                invitedUser.setTreasurePoint(tempInvitedUser.getTreasurePoint() == null ? 1 : tempInvitedUser.getTreasurePoint() + 1);
+            }
+            updateUser.setInvitedCode(invitedCode);
+            userService.updateInvition(updateUser, invitedUser);
+            return new ResultModel<>(ResultCode.SUCCESS,true);
+
+        } catch (ParamException e) {
+            return new ResultModel<>("-6", e.getMessage());
+        }
+
+    }
+
     @PostMapping("/login")
     @ResponseBody
     @ApiOperation("登录信息")
@@ -121,7 +187,7 @@ public class LoginController extends BaseController {
             @ApiImplicitParam(name = "deviceId", value = "机器码", required = false, paramType = "query", dataType = "String"),
             @ApiImplicitParam(name = "invitedCode", value = "来源", required = false, paramType = "query", dataType = "String"),
     })
-    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String password, String invitedCode) {
+    public ResultModel<UserResultDto> login(String mobile, String source, String deviceId, String password) {
         try {
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(mobile), "手机号码不能未空");
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(password), "密码不能未空");
@@ -132,46 +198,23 @@ public class LoginController extends BaseController {
             if (!PasswrodUtils.verify(password.toLowerCase(), key, user.getPassword())) {
                 return new ResultModel<>(ResultCode.LOGIN_FAIL_PASSWORD_ERROR);
             }
-            if (!org.springframework.util.StringUtils.isEmpty(user.getToken()) && !org.springframework.util.StringUtils.isEmpty(invitedCode)) {
-                return new ResultModel<>(ResultCode.LOGIN_FAIL_PASSWORD_ERROR);
-            }
-            User invitedUser = null;
-            if (org.springframework.util.StringUtils.isEmpty(user.getInvitedCode()) && !org.springframework.util.StringUtils.isEmpty(invitedCode)) {
-                UserDetail invitedUserDetail = userDetailService.findByInvitedCode(invitedCode);
-                invitedUser = new User();
-                if (invitedUserDetail == null) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
-                }
-                User tempInvitedUser = userService.find(invitedUserDetail.getUserId());
-                if (tempInvitedUser == null) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_ERROR);
-                }
-                if (tempInvitedUser.getId().equals(user.getId())) {
-                    return new ResultModel<>(ResultCode.LOGIN_FAIL_INVITED_SELF_ERROR);
-                }
-                invitedUser.setId(tempInvitedUser.getId());
-                invitedUser.setLuckPoin(tempInvitedUser.getLuckPoin() == null ? 1 : tempInvitedUser.getLuckPoin() + 1);
-                invitedUser.setIntegral(tempInvitedUser.getIntegral() == null ? 1 : tempInvitedUser.getIntegral() + 1);
-                invitedUser.setFindTreasurePoint(tempInvitedUser.getFindTreasurePoint() == null ? 1 : tempInvitedUser.getFindTreasurePoint() + 1);
-                invitedUser.setTreasurePoint(tempInvitedUser.getTreasurePoint() == null ? 1 : tempInvitedUser.getTreasurePoint() + 1);
-            }
             String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
             User updateUser = new User();
             updateUser.setId(user.getId());
             updateUser.setToken(uuid);
-            updateUser.setInvitedCode(invitedCode);
             if (!org.springframework.util.StringUtils.isEmpty(source)) {
                 updateUser.setSource(source);
             }
             if (!org.springframework.util.StringUtils.isEmpty(deviceId)) {
                 updateUser.setDeviceId(deviceId);
             }
-            userService.updateInvition(updateUser, invitedUser);
+
+            userService.update(updateUser);
             UserDto userDto = new UserDto();
+            user= userService.findByMobile(mobile);
             BeanUtils.copyProperties(user, userDto);
             UserResultDto userResultDto = new UserResultDto();
             userResultDto.setUserDto(userDto);
-
             UserDetail userDetail = userDetailService.findByUserId(user.getId());
             if (userDetail != null) {
                 UserDetailDto userDetailDto = new UserDetailDto();
