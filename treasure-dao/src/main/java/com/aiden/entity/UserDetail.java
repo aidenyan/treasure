@@ -29,6 +29,15 @@ public class UserDetail {
     private BigDecimal alreadyAmount;
     private String accountName;
     private String accountNum;
+    private String accountRealName;
+
+    public String getAccountRealName() {
+        return accountRealName;
+    }
+
+    public void setAccountRealName(String accountRealName) {
+        this.accountRealName = accountRealName;
+    }
 
     public BigDecimal getBalanceAmount() {
         return balanceAmount;

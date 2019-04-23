@@ -6,8 +6,11 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 public interface CashInfoMapper {
-    int count(@Param("userId") Long userId);
+    int count(@Param("userId") Long userId,@Param("type")Integer type);
 
-    List<CashInfo> findList(@Param("userId") Long userId, @Param("start") Integer start, @Param("pageSize") Integer pageSize);
-   int insert(CashInfo cashInfo);
+    List<CashInfo> findList(@Param("userId") Long userId,@Param("type")Integer type, @Param("start") Integer start, @Param("pageSize") Integer pageSize);
+
+    int insert(CashInfo cashInfo);
+
+    int updateStatus(@Param("status") Integer status, @Param("id") Long id);
 }

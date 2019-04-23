@@ -13,7 +13,15 @@ public class CashInfo {
     private Date createdTime;
     private Date completeTime;
     private Integer status;
+    private String accountRealName;
 
+    public String getAccountRealName() {
+        return accountRealName;
+    }
+
+    public void setAccountRealName(String accountRealName) {
+        this.accountRealName = accountRealName;
+    }
     public Integer getStatus() {
         return status;
     }

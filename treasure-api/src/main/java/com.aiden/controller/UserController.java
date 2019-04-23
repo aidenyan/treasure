@@ -75,9 +75,9 @@ public class UserController extends BaseController {
                                         String nickName, Byte sex, String birthDay, String userDesc, @RequestHeader(value = "token") String token) {
         try {
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token), "token不能未空");
-            veriftyTrue(sex==null||sex.equals(Byte.valueOf("0"))||sex.equals(Byte.valueOf("1")), "sex只能为0或者1");
-            veriftyTrue(nickName==null||nickName.length()<50,"长度不能超过50");
-            veriftyTrue(birthDay==null||birthDay.length()<20,"长度不能超过50");
+            veriftyTrue(sex == null || sex.equals(Byte.valueOf("0")) || sex.equals(Byte.valueOf("1")), "sex只能为0或者1");
+            veriftyTrue(nickName == null || nickName.length() < 50, "长度不能超过50");
+            veriftyTrue(birthDay == null || birthDay.length() < 20, "长度不能超过50");
             if (multipartFile == null && StringUtils.isEmpty(nickName) && sex == null && StringUtils.isEmpty(birthDay) && StringUtils.isEmpty(userDesc)) {
                 return new ResultModel<>(ResultCode.USER_INFO_PARAM_BLANK);
             }
@@ -119,7 +119,7 @@ public class UserController extends BaseController {
                 updateDetail.setIntroduce(userDesc);
             }
             updateDetail.setHeaderUrl(headerUrl);
-            userService.update(user, updateDetail);
+            userService.update(updateUser, updateDetail);
             return new ResultModel<>(ResultCode.SUCCESS);
         } catch (ParamException e) {
             return new ResultModel<>("-6", e.getMessage());
@@ -237,7 +237,7 @@ public class UserController extends BaseController {
             if (userDetail == null) {
                 throw new ServiceException("系统信息错误");
             }
-            Page<CashInfo, Void> page = cashInfoService.page(user.getId(), currentPage, pageSize);
+            Page<CashInfo, Void> page = cashInfoService.page(user.getId(),null, currentPage, pageSize);
             List<CashInfoDto> cashInfoDtoList = new ArrayList<>();
             if (!CollectionUtils.isEmpty(page.getResult())) {
                 page.getResult().forEach(cashInfo -> {
@@ -308,4 +308,48 @@ public class UserController extends BaseController {
             return new ResultModel<>("-6", e.getMessage());
         }
     }
+
+
+    @PostMapping("/update_account")
+    @ResponseBody
+    @ApiOperation("更新提现账号信息")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "accountNum", value = "账号（长度不超过80）", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "accountName", value = "账号名字（如果支付宝长度不超过80）", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "accountRealName", value = "账号用户的名字，即支付/微信对应的真实姓名长度不超过80", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
+    })
+    public ResultModel<Void> updateAccount(
+            String accountName, String accountNum, String accountRealName, @RequestHeader(value = "token") String token) {
+        try {
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token), "token不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountNum), "accountNum不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountRealName), "accountRealName不能未空");
+            User user = userService.findToken(token);
+            if (user == null) {
+                throw new UnloginException();
+            }
+            String headerUrl = null;
+
+
+            UserDetail userDetail = userDetailService.findByUserId(user.getId());
+
+            if (userDetail == null) {
+                throw new UnloginException();
+            }
+            UserDetail updateDetail = new UserDetail();
+            updateDetail.setId(userDetail.getId());
+            updateDetail.setAccountName(accountName);
+            updateDetail.setAccountNum(accountNum);
+            updateDetail.setAccountRealName(accountRealName);
+            userService.update(updateDetail);
+            return new ResultModel<>(ResultCode.SUCCESS);
+        } catch (ParamException e) {
+            return new ResultModel<>("-6", e.getMessage());
+        }
+    }
+
+
+
+
 }

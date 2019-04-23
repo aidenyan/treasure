@@ -106,6 +106,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public void update(UserDetail userDetail) {
+        userDetailService.save(userDetail);
+    }
+
+    @Override
     @Transactional(readOnly = false, rollbackFor = {Exception.class})
     public void updateTreasurePoint(Long userId, Integer updatePoint) {
         Assert.notNull(userId);

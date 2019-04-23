@@ -17,11 +17,12 @@
     <result column="already_amount" property="alreadyAmount" jdbcType="DECIMAL"/>
     <result column="account_num" property="accountNum" jdbcType="VARCHAR" />
     <result column="account_name" property="accountName" jdbcType="VARCHAR" />
+    <result column="account_real_name" property="accountRealName" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, sex, birth_day, introduce, header_url, has_certification, identification_card, 
     front_id_card_url, reverse_id_card_url, invitation_code,user_id,balance_amount,
-    already_amount,account_num,account_name
+    already_amount,account_num,account_name,account_real_name
   </sql>
   <select id="findByUserId" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -91,7 +92,9 @@
       <if test=" accountName != null">
         account_name,
       </if>
-
+      <if test=" accountRealName != null">
+        account_real_name,
+      </if>
 
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -142,6 +145,9 @@
       <if test=" accountName != null">
         #{accountName},
       </if>
+      <if test=" accountRealName != null">
+        #{accountRealName},
+      </if>
     </trim>
   </insert>
   <update id="update" parameterType="com.aiden.entity.UserDetail" >
@@ -181,6 +187,9 @@
       </if>
       <if test=" accountName != null">
         account_name=   #{accountName},
+      </if>
+      <if test=" accountRealName != null">
+        account_real_name=    #{accountRealName},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}

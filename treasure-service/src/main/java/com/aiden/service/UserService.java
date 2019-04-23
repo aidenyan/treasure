@@ -62,6 +62,12 @@ public interface UserService {
      * @param userDetail
      */
     void update(User user, UserDetail userDetail);
+    /**
+     * 保存信息
+     *
+     * @param userDetail
+     */
+    void update(UserDetail userDetail);
 
     void updateTreasurePoint(Long userId, Integer updatePoint);
 }

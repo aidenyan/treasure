@@ -3,89 +3,117 @@
 <mapper namespace="com.aiden.mapper.CashInfoMapper">
     <resultMap id="BaseResultMap" type="com.aiden.entity.CashInfo">
         <id column="ID" property="id" jdbcType="BIGINT"/>
-        <result column="user_id" property="userId" />
-        <result column="cash_withdrawal" property="cashWithdrawal" />
-        <result column="type" property="type" />
-        <result column="status" property="status" />
-        <result column="account_num" property="accountNum" />
-        <result column="account_name" property="accountName" />
-        <result column="created_time" property="createdTime" />
-        <result column="complete_time" property="completeTime" />
-
+        <result column="user_id" property="userId"/>
+        <result column="cash_withdrawal" property="cashWithdrawal"/>
+        <result column="type" property="type"/>
+        <result column="status" property="status"/>
+        <result column="account_num" property="accountNum"/>
+        <result column="account_name" property="accountName"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="complete_time" property="completeTime"/>
+        <result column="account_real_name" property="accountRealName"/>
     </resultMap>
     <sql id="Base_Column_List">
-    ID, user_id,cash_withdrawal, status,type,account_num,account_name, complete_time, created_time
+    ID, user_id,cash_withdrawal, status,type,account_num,account_name, account_real_name,complete_time, created_time
   </sql>
     <select id="count" resultType="java.lang.Integer">
         select count(id)
         from t_cash_info
-        where user_id=#{userId}
+        where 1=1
+         <if test=" userId != null">
+             and user_id=#{userId}
+         </if>
+        <if test=" type != null">
+            and type=#{type}
+        </if>
     </select>
-   <select id="findList" resultMap="BaseResultMap">
-       select
-       <include refid="Base_Column_List" />
-       from t_cash_info
-       where user_id=#{userId}
-       ORDER BY  id DESC limit #{start},#{pageSize}
-   </select>
-    <insert id="insert" parameterType="com.aiden.entity.CashInfo" >
+    <select id="findList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_cash_info
+        where  1=1
+        <if test=" userId != null">
+            and user_id=#{userId}
+        </if>
+        <if test=" type != null">
+            and type=#{type}
+        </if>
+        ORDER BY id DESC limit #{start},#{pageSize}
+    </select>
+    <update id="updateStatus">
+        update t_cash_info
+
+        set status=#{status},
+      complete_time=now()
+
+        where id=#{id}
+
+    </update>
+
+    <insert id="insert" parameterType="com.aiden.entity.CashInfo">
         insert into t_cash_info
-        <trim prefix="(" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 id,
             </if>
-            <if test="userId != null" >
+            <if test="userId != null">
                 user_id,
             </if>
-            <if test="cashWithdrawal != null" >
+            <if test="cashWithdrawal != null">
                 cash_withdrawal,
             </if>
-            <if test="type != null" >
+            <if test="type != null">
                 type,
             </if>
-            <if test="status != null" >
+            <if test="status != null">
                 status,
             </if>
-            <if test="accountNum != null" >
+            <if test="accountNum != null">
                 account_num,
             </if>
-            <if test="accountName != null" >
+            <if test="accountName != null">
                 account_name,
             </if>
-            <if test="createdTime != null" >
+            <if test="createdTime != null">
                 created_time,
             </if>
-            <if test="completeTime != null" >
+            <if test="completeTime != null">
                 complete_time,
             </if>
+            <if test=" accountRealName != null">
+                account_real_name,
+            </if>
         </trim>
-        <trim prefix="values (" suffix=")" suffixOverrides="," >
-            <if test="id != null" >
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
                 #{id},
             </if>
-            <if test="userId != null" >
+            <if test="userId != null">
                 #{userId},
             </if>
-            <if test="cashWithdrawal != null" >
+            <if test="cashWithdrawal != null">
                 #{cashWithdrawal},
             </if>
-            <if test="type != null" >
+            <if test="type != null">
                 #{type},
             </if>
-            <if test="status != null" >
+            <if test="status != null">
                 #{status},
             </if>
-            <if test="accountNum != null" >
+            <if test="accountNum != null">
                 #{accountNum},
             </if>
-            <if test="accountName != null" >
+            <if test="accountName != null">
                 #{accountName},
             </if>
-            <if test="createdTime != null" >
+            <if test="createdTime != null">
                 #{createdTime},
             </if>
-            <if test="completeTime != null" >
+            <if test="completeTime != null">
                 #{completeTime},
+            </if>
+            <if test=" accountRealName != null">
+                #{accountRealName},
             </if>
         </trim>
     </insert>
