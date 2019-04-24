@@ -12,6 +12,7 @@ import com.aiden.entity.UserDetail;
 import com.aiden.exception.ParamException;
 import com.aiden.exception.UnloginException;
 import com.aiden.service.CashInfoService;
+import com.aiden.service.UserDetailService;
 import com.aiden.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
@@ -29,14 +30,16 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-@Controller("/cash")
-@Api(value = "cash", tags = "CashController", description = "现金信息")
+@Controller("/cash_withdrawal")
+@Api(value = "cash_info", tags = "CashController", description = "现金信息")
 public class CashController extends BaseController {
     @Autowired
     private CashInfoService cashInfoService;
 
     @Autowired
     private UserService userService;
+    @Autowired
+    private UserDetailService userDetailService;
 
     @GetMapping("/sure_cash")
     @ResponseBody
@@ -54,7 +57,7 @@ public class CashController extends BaseController {
         return new ResultModel<>(ResultCode.SUCCESS);
     }
 
-    @GetMapping("/balance/page")
+    @GetMapping("/sys/balance/page")
     @ResponseBody
     @ApiOperation("获取钱包信息")
     @ApiImplicitParams({
@@ -63,7 +66,7 @@ public class CashController extends BaseController {
             @ApiImplicitParam(name = "pageSize", value = "每页数", paramType = "query", dataType = "Integer"),
 
     })
-    public ResultModel<Page<CashInfoDto, Void>> pageBalance(Integer pageSize, Integer currentPage, @RequestHeader(value = "sysToken") String sysToken) {
+    public ResultModel<Page<CashInfoDto, Void>> sysPageBalance(Integer pageSize, Integer currentPage, @RequestHeader(value = "sysToken") String sysToken) {
         veriftyTrue(!org.springframework.util.StringUtils.isEmpty(sysToken), "sysToken不能未空");
         if (!sysToken.equals(AUTHOR_KEY)) {
             return new ResultModel<>(ResultCode.AUTHOR);
@@ -82,10 +85,11 @@ public class CashController extends BaseController {
                 CashInfoDto cashInfoDto = new CashInfoDto();
                 cashInfoDto.setAccountName(cashInfo.getAccountName());
                 cashInfoDto.setAccountNum(cashInfo.getAccountNum());
-                cashInfoDto.setCashWithdrawal(cashInfo.getCashWithdrawal().multiply(BigDecimal.valueOf(-1)));
+                cashInfoDto.setCashWithdrawal(cashInfo.getCashWithdrawal());
                 cashInfoDto.setCompleteTime(cashInfo.getCompleteTime());
                 cashInfoDto.setCreatedTime(cashInfo.getCreatedTime());
                 cashInfoDto.setId(cashInfo.getId());
+                cashInfoDto.setUserId(cashInfo.getUserId());
                 cashInfoDto.setStatus(StatusEnum.valueOf(cashInfo.getStatus()));
                 cashInfoDto.setType(BalanceTypeEnum.valueOf(cashInfo.getType()));
                 cashInfoDtoList.add(cashInfoDto);
@@ -95,7 +99,7 @@ public class CashController extends BaseController {
         return new ResultModel<>(ResultCode.SUCCESS, resultPage);
     }
 
-    @PostMapping("/cash_withdrawal")
+    @PostMapping("/draw")
     @ResponseBody
     @ApiOperation("提现")
     @ApiImplicitParams({
@@ -111,11 +115,20 @@ public class CashController extends BaseController {
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token), "token不能未空");
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountNum), "accountNum不能未空");
             veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountRealName), "accountRealName不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountName), "accountName不能未空");
             veriftyTrue(cashWithdrawal != null, "cashWithdrawal不能未空");
             User user = userService.findToken(token);
             if (user == null) {
                 throw new UnloginException();
             }
+            UserDetail userDetail = userDetailService.findByUserId(user.getId());
+            if (userDetail == null) {
+                throw new UnloginException();
+            }
+            if (userDetail.getBalanceAmount() == null || userDetail.getBalanceAmount().compareTo(cashWithdrawal) <0) {
+                return new ResultModel<>(ResultCode.CASH_FAIL_NOT_ENOUGH);
+            }
+          cashInfoService.updateCash(user.getId(),cashWithdrawal,BalanceTypeEnum.CASH_WITHDRAWAL,StatusEnum.INIT, accountName,  accountNum,  accountRealName );
 
 
             return new ResultModel<>(ResultCode.SUCCESS);

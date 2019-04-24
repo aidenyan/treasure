@@ -248,6 +248,7 @@ public class UserController extends BaseController {
                     cashInfoDto.setCompleteTime(cashInfo.getCompleteTime());
                     cashInfoDto.setCreatedTime(cashInfo.getCreatedTime());
                     cashInfoDto.setId(cashInfo.getId());
+                    cashInfoDto.setUserId(cashInfo.getUserId());
                     cashInfoDto.setStatus(StatusEnum.valueOf(cashInfo.getStatus()));
                     cashInfoDto.setType(BalanceTypeEnum.valueOf(cashInfo.getType()));
                     cashInfoDto.setUserId(user.getId());

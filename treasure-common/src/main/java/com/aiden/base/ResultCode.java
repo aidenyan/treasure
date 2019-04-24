@@ -67,7 +67,11 @@ public enum ResultCode {
     /**
      * 用户相关信息
      */
-    USER_INFO_PARAM_BLANK("-50001","上传的参数必须有一个")
+    USER_INFO_PARAM_BLANK("-50001","上传的参数必须有一个"),
+    /**
+     * 现金
+     */
+    CASH_FAIL_NOT_ENOUGH("-60001","余额不足"),
     ;
 
     private final String code;
