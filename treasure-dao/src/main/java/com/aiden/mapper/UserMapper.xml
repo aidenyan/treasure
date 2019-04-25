@@ -18,10 +18,12 @@
     <result column="send_created" property="sendCreated" jdbcType="BIGINT" />
     <result column="verify_code" property="verifyCode" jdbcType="VARCHAR" />
     <result column="verify_send_date" property="verifySendDate" jdbcType="TIMESTAMP"/>
+    <result column="send_num" property="sendNum" jdbcType="INTEGER" />
+
   </resultMap>
   <sql id="Base_Column_List" >
     id, nick_name, mobile, password, token, source, device_id, integral,verify_send_date,verify_code,
-    find_treasure_point, treasure_point, luck_poin, Invited_code,is_deleted,send_created
+    find_treasure_point, treasure_point, luck_poin, Invited_code,is_deleted,send_created,send_num
   </sql>
   <select id="find" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -92,6 +94,9 @@
       <if test="verifySendDate != null" >
         verify_send_date,
       </if>
+      <if test="sendNum != null" >
+        send_num,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -142,6 +147,9 @@
       <if test="verifySendDate != null" >
         #{verifySendDate},
       </if>
+      <if test="sendNum != null" >
+        #{sendNum},
+      </if>
     </trim>
   </insert>
   <update id="update" parameterType="com.aiden.entity.User" >
@@ -188,6 +196,9 @@
       </if>
       <if test="verifySendDate != null" >
         verify_send_date= #{verifySendDate},
+      </if>
+      <if test="sendNum != null" >
+        send_num=#{sendNum},
       </if>
     </set>
     where id = #{id,jdbcType=INTEGER} and is_deleted=FALSE

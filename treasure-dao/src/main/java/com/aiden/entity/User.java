@@ -33,6 +33,15 @@ public class User {
 
     private String verifyCode;
     private Date verifySendDate;
+    private Integer sendNum;
+
+    public Integer getSendNum() {
+        return sendNum;
+    }
+
+    public void setSendNum(Integer sendNum) {
+        this.sendNum = sendNum;
+    }
 
     public String getVerifyCode() {
         return verifyCode;

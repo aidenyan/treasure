@@ -78,6 +78,9 @@ public class LoginController extends BaseController {
             if (user!=null&&!org.springframework.util.StringUtils.isEmpty(user.getPassword())) {
                 return new ResultModel<>(ResultCode.LOGIN_FAIL_ALREADY_REG);
             }
+            if(user.getSendNum()!=null&&user.getSendNum()>TOATL_SEND_NUM){
+                return new ResultModel<>(ResultCode.LOGIN_FAIL_SEND_NUM);
+            }
             if (user != null) {
                 if (user.getSendCreated() != null && (user.getSendCreated() + 60 * 1000L) >= DateUtils.now().getTime()) {
                     return new ResultModel<>(ResultCode.LOGIN_FAIL_SMS_ERROR);

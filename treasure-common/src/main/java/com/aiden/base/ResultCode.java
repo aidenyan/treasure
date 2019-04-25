@@ -40,6 +40,7 @@ public enum ResultCode {
     LOGIN_FAIL_VERIFY_CODE_ERROR("-20009","验证码错误"),
     LOGIN_FAIL_VERIFY_DATE_ERROR("-20009","验证时间已经超过30分钟了"),
     LOGIN_FAIL_ALREADY_INVITED_ERROR("-20010","已经填写过邀请码了"),
+    LOGIN_FAIL_SEND_NUM("-20011","发送次数已经超过5次"),
     /**
      *
      */
