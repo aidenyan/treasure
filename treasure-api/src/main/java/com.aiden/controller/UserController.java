@@ -98,6 +98,7 @@ public class UserController extends BaseController {
             User updateUser = null;
             if (!StringUtils.isEmpty(nickName)) {
                 updateUser = new User();
+                updateUser.setId(user.getId());
                 updateUser.setNickName(nickName);
             }
             UserDetail userDetail = userDetailService.findByUserId(user.getId());
