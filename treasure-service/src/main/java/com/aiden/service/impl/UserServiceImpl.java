@@ -100,7 +100,10 @@ public class UserServiceImpl implements UserService {
             }
         }
         if (userDetail != null) {
-            userDetail.setUserId(user.getId());
+            if(user!=null&&user.getId()!=null){
+                userDetail.setUserId(user.getId());
+            }
+
             userDetailService.save(userDetail);
         }
     }

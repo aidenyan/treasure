@@ -103,6 +103,7 @@ public class UserController extends BaseController {
             }
             UserDetail userDetail = userDetailService.findByUserId(user.getId());
             UserDetail updateDetail = new UserDetail();
+            updateDetail.setUserId(user.getId());
             if (userDetail != null) {
                 updateDetail.setId(userDetail.getId());
                 if (StringUtils.isEmpty(userDetail.getInvitationCode())) {
