@@ -87,12 +87,13 @@
             <if test="treasureName != null">
                 #{treasureName},
             </if>
-            <if test="distance != null">
-                #{distance},
-            </if>
             <if test="level != null">
                 #{level},
             </if>
+            <if test="distance != null">
+                #{distance},
+            </if>
+
             <if test="type != null">
                 #{type},
             </if>
