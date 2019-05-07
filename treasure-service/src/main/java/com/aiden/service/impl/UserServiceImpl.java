@@ -64,8 +64,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void updateInvition(User record, User invitedUser) {
+    public void regUser(User record, User invitedUser) {
         update(record);
+        TreasureFindInfo treasureFindInfo=new TreasureFindInfo();
+        treasureFindInfo.setPoint(5);
+        treasureFindInfo.setType(TypeEnum.REG.getType());
+        treasureFindInfo.setUserId(record.getId());
+        treasureFindInfo.setCreatedDate(DateUtils.now());
+        treasureFindInfoMapper.insert(treasureFindInfo);
+        TreasurePointInfo treasurePointInfo=new TreasurePointInfo();
+        treasurePointInfo.setPoint(5);
+        treasurePointInfo.setType(TypeEnum.REG.getType());
+        treasurePointInfo.setUserId(record.getId());
+        treasurePointInfo.setCreatedDate(DateUtils.now());
+        treasurePointInfoMapper.insert(treasurePointInfo);
         if(invitedUser!=null){
             update(invitedUser);
             IntegralInfo integralInfo=new IntegralInfo();
@@ -74,13 +86,13 @@ public class UserServiceImpl implements UserService {
             integralInfo.setUserId(invitedUser.getId());
             integralInfo.setCreatedDate(DateUtils.now());
             integralInfoMapper.insert(integralInfo);
-            TreasureFindInfo treasureFindInfo=new TreasureFindInfo();
+             treasureFindInfo=new TreasureFindInfo();
             treasureFindInfo.setPoint(1);
             treasureFindInfo.setType(TypeEnum.INVITED.getType());
             treasureFindInfo.setUserId(invitedUser.getId());
             treasureFindInfo.setCreatedDate(DateUtils.now());
             treasureFindInfoMapper.insert(treasureFindInfo);
-            TreasurePointInfo treasurePointInfo=new TreasurePointInfo();
+             treasurePointInfo=new TreasurePointInfo();
             treasurePointInfo.setPoint(1);
             treasurePointInfo.setType(TypeEnum.INVITED.getType());
             treasurePointInfo.setUserId(invitedUser.getId());

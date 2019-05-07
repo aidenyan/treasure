@@ -3,7 +3,9 @@ package com.aiden.common.enums;
 public enum TypeEnum {
 
     SYS  (1, "系统"),
-    INVITED(2, "邀请码");
+    INVITED(2, "邀请码"),
+    REG(3, "注册"),
+    ;
     private final int type;
     private final String message;
 
