@@ -85,12 +85,18 @@ public class UserController extends BaseController {
             if (user == null) {
                 throw new UnloginException();
             }
+            UserDetail userDetail = userDetailService.findByUserId(user.getId());
+            UserDetail updateDetail = new UserDetail();
+            updateDetail.setUserId(user.getId());
+            boolean updateCouldDetail=false;
             String headerUrl = null;
             if (multipartFile != null) {
                 try {
                     String fileType = multipartFile.getOriginalFilename();
                     fileType = fileType.substring(fileType.lastIndexOf("."));
                     headerUrl = FileUtils.saveFile(FILE_PATH + "/" + user.getId() + "/", multipartFile.getInputStream(), fileType);
+                    updateCouldDetail=true;
+                    updateDetail.setHeaderUrl(headerUrl);
                 } catch (IOException e) {
                     throw new FileException("写入图片信息失败！");
                 }
@@ -101,26 +107,33 @@ public class UserController extends BaseController {
                 updateUser.setId(user.getId());
                 updateUser.setNickName(nickName);
             }
-            UserDetail userDetail = userDetailService.findByUserId(user.getId());
-            UserDetail updateDetail = new UserDetail();
-            updateDetail.setUserId(user.getId());
+
             if (userDetail != null) {
                 updateDetail.setId(userDetail.getId());
                 if (StringUtils.isEmpty(userDetail.getInvitationCode())) {
                     updateDetail.setInvitationCode(userDetailService.findInvitationCode());
+                    updateCouldDetail=true;
                 }
             } else {
                 updateDetail.setUserId(user.getId());
                 updateDetail.setInvitationCode(userDetailService.findInvitationCode());
+                updateCouldDetail=true;
             }
             if (!StringUtils.isEmpty(birthDay)) {
                 updateDetail.setBirthDay(DateUtils.convert(birthDay, "yyyy-MM-dd"));
+                updateCouldDetail=true;
             }
-            updateDetail.setSex(sex);
+            if (!StringUtils.isEmpty(sex)) {
+              updateDetail.setSex(sex);
+                updateCouldDetail=true;
+            }
             if (!StringUtils.isEmpty(userDesc)) {
                 updateDetail.setIntroduce(userDesc);
+                updateCouldDetail=true;
             }
-            updateDetail.setHeaderUrl(headerUrl);
+            if(!updateCouldDetail){
+                updateDetail=null;
+            }
             userService.update(updateUser, updateDetail);
             return new ResultModel<>(ResultCode.SUCCESS);
         } catch (ParamException e) {
