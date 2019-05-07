@@ -170,10 +170,12 @@ public class LoginController extends BaseController {
                 invitedUser.setFindTreasurePoint(tempInvitedUser.getFindTreasurePoint() == null ? 1 : tempInvitedUser.getFindTreasurePoint() + 1);
                 invitedUser.setTreasurePoint(tempInvitedUser.getTreasurePoint() == null ? 1 : tempInvitedUser.getTreasurePoint() + 1);
             }
+            updateUser.setFindTreasurePoint(user.getFindTreasurePoint()==null?5:user.getFindTreasurePoint()+5);
+            updateUser.setTreasurePoint(user.getTreasurePoint() == null ?5 : user.getTreasurePoint() + 5);
             updateUser.setInvitedCode(invitedCode);
             String uuid = UUID.randomUUID().toString().replace("-", "").toLowerCase();
              updateUser.setToken(uuid);
-            userService.updateInvition(updateUser, invitedUser);
+            userService.regUser(updateUser, invitedUser);
             return new ResultModel<>(ResultCode.SUCCESS,uuid);
         } catch (ParamException e) {
             return new ResultModel<>("-6", e.getMessage());

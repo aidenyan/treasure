@@ -53,7 +53,7 @@ public interface UserService {
      *
      * @param record
      */
-    void updateInvition(User record,User invitedUser);
+    void regUser(User record,User invitedUser);
 
     /**
      * 保存信息
