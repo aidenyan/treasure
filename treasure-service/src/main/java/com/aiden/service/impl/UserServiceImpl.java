@@ -121,6 +121,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = false, rollbackFor = {Exception.class})
     public void update(UserDetail userDetail) {
         userDetailService.save(userDetail);
     }
