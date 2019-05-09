@@ -88,14 +88,14 @@ public class UserController extends BaseController {
             UserDetail userDetail = userDetailService.findByUserId(user.getId());
             UserDetail updateDetail = new UserDetail();
             updateDetail.setUserId(user.getId());
-            boolean updateCouldDetail=false;
+            boolean updateCouldDetail = false;
             String headerUrl = null;
             if (multipartFile != null) {
                 try {
                     String fileType = multipartFile.getOriginalFilename();
                     fileType = fileType.substring(fileType.lastIndexOf("."));
                     headerUrl = FileUtils.saveFile(FILE_PATH + "/" + user.getId() + "/", multipartFile.getInputStream(), fileType);
-                    updateCouldDetail=true;
+                    updateCouldDetail = true;
                     updateDetail.setHeaderUrl(headerUrl);
                 } catch (IOException e) {
                     throw new FileException("写入图片信息失败！");
@@ -112,27 +112,27 @@ public class UserController extends BaseController {
                 updateDetail.setId(userDetail.getId());
                 if (StringUtils.isEmpty(userDetail.getInvitationCode())) {
                     updateDetail.setInvitationCode(userDetailService.findInvitationCode());
-                    updateCouldDetail=true;
+                    updateCouldDetail = true;
                 }
             } else {
                 updateDetail.setUserId(user.getId());
                 updateDetail.setInvitationCode(userDetailService.findInvitationCode());
-                updateCouldDetail=true;
+                updateCouldDetail = true;
             }
             if (!StringUtils.isEmpty(birthDay)) {
                 updateDetail.setBirthDay(DateUtils.convert(birthDay, "yyyy-MM-dd"));
-                updateCouldDetail=true;
+                updateCouldDetail = true;
             }
             if (!StringUtils.isEmpty(sex)) {
-              updateDetail.setSex(sex);
-                updateCouldDetail=true;
+                updateDetail.setSex(sex);
+                updateCouldDetail = true;
             }
             if (!StringUtils.isEmpty(userDesc)) {
                 updateDetail.setIntroduce(userDesc);
-                updateCouldDetail=true;
+                updateCouldDetail = true;
             }
-            if(!updateCouldDetail){
-                updateDetail=null;
+            if (!updateCouldDetail) {
+                updateDetail = null;
             }
             userService.update(updateUser, updateDetail);
             return new ResultModel<>(ResultCode.SUCCESS);
@@ -252,7 +252,7 @@ public class UserController extends BaseController {
             if (userDetail == null) {
                 throw new ServiceException("系统信息错误");
             }
-            Page<CashInfo, Void> page = cashInfoService.page(user.getId(),null, currentPage, pageSize);
+            Page<CashInfo, Void> page = cashInfoService.page(user.getId(), null, currentPage, pageSize);
             List<CashInfoDto> cashInfoDtoList = new ArrayList<>();
             if (!CollectionUtils.isEmpty(page.getResult())) {
                 page.getResult().forEach(cashInfo -> {
@@ -365,7 +365,41 @@ public class UserController extends BaseController {
         }
     }
 
+    @PostMapping("/update_idcard")
+    @ResponseBody
+    @ApiOperation("实名认证信息接口")
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "idCard", value = "省负责（长度不超过80）", paramType = "query", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "accountRealName", value = "账号用户的名字，即支付/微信对应的真实姓名长度不超过80", required = true, paramType = "query", dataType = "String"),
+            @ApiImplicitParam(name = "token", value = "token", paramType = "header", required = true, dataType = "String")
+    })
+    public ResultModel<Void> updateIdCard(
+            String idCard, String accountRealName, @RequestHeader(value = "token") String token) {
+        try {
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(token), "token不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(idCard), "idCard不能未空");
+            veriftyTrue(idCard.length() < 80, "idCard长度不能超过80");
 
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(accountRealName), "accountRealName不能未空");
+            User user = userService.findToken(token);
+            if (user == null) {
+                throw new UnloginException();
+            }
+            UserDetail userDetail = userDetailService.findByUserId(user.getId());
+            if (userDetail == null) {
+                throw new UnloginException();
+            }
+            UserDetail updateDetail = new UserDetail();
+            updateDetail.setId(userDetail.getId());
+            updateDetail.setIdentificationCard(idCard);
+            updateDetail.setHasCertification(true);
+            updateDetail.setAccountRealName(accountRealName);
+            userService.update(updateDetail);
+            return new ResultModel<>(ResultCode.SUCCESS);
+        } catch (ParamException e) {
+            return new ResultModel<>("-6", e.getMessage());
+        }
+    }
 
 
 }

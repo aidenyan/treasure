@@ -64,6 +64,7 @@ public enum ResultCode {
     TREASURE_FAIL_COMPLETED("-40004","活动没有启动"),
     TREASURE_FAIL_NOT_EXIST("-40005","宝藏类型不存在"),
     TREASURE_FAIL_NOT_POINT("-40006","用户已经没有寻宝点了"),
+    TREASURE_FAIL_END("-40007","宝藏类型结束了"),
 
     /**
      * 用户相关信息

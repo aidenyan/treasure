@@ -19,7 +19,6 @@ public class TreasureOpenResultDto {
     private TreasureLevelEnum level;
 
     @ApiModelProperty("宝藏类型")
-
     private TreasureTypeEnum type;
     @ApiModelProperty("宝藏内容")
     private String content;

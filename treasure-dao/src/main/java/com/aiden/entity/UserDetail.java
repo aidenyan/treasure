@@ -14,7 +14,7 @@ public class UserDetail {
 
     private String headerUrl;
 
-    private Byte hasCertification;
+    private Boolean hasCertification;
 
     private String identificationCard;
 
@@ -119,11 +119,11 @@ public class UserDetail {
         this.headerUrl = headerUrl == null ? null : headerUrl.trim();
     }
 
-    public Byte getHasCertification() {
+    public Boolean getHasCertification() {
         return hasCertification;
     }
 
-    public void setHasCertification(Byte hasCertification) {
+    public void setHasCertification(Boolean hasCertification) {
         this.hasCertification = hasCertification;
     }
 

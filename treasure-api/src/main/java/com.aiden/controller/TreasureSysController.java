@@ -81,6 +81,9 @@ public class TreasureSysController extends BaseController {
             if (treasureInfo == null) {
                 return new ResultModel<>(ResultCode.TREASURE_FAIL_NOT_EXIST);
             }
+            if(treasureInfo.getEndTime()!=null&&treasureInfo.getEndTime().getTime()<DateUtils.now().getTime()-10*60*1000){
+                return new ResultModel<>(ResultCode.TREASURE_FAIL_END);
+            }
             TreasureDistributionInfo treasureDistributionInfo = new TreasureDistributionInfo();
             treasureDistributionInfo.setAmount(treasureInfo.getAmount());
             treasureDistributionInfo.setContent(treasureInfo.getContent());

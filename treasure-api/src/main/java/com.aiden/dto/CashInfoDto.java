@@ -2,6 +2,7 @@ package com.aiden.dto;
 
 import com.aiden.common.enums.BalanceTypeEnum;
 import com.aiden.common.enums.StatusEnum;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -23,8 +24,10 @@ public class CashInfoDto {
     private String accountNum;
     @ApiModelProperty("账号名称，如中国银行，支付宝")
     private String accountName;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("创建时间")
     private Date createdTime;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("完成时间")
     private Date completeTime;
     @ApiModelProperty("状态")

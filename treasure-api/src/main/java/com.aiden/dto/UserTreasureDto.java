@@ -2,6 +2,7 @@ package com.aiden.dto;
 
 import com.aiden.common.enums.TreasureLevelEnum;
 import com.aiden.common.enums.TreasureTypeEnum;
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 
@@ -25,6 +26,7 @@ public class UserTreasureDto {
     private TreasureTypeEnum type;
     @ApiModelProperty("宝藏级别")
     private TreasureLevelEnum level;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("抽奖时间")
     private Date receiveTime;
     @ApiModelProperty("宝藏的内容")

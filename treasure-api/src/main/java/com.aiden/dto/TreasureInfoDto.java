@@ -1,9 +1,11 @@
 package com.aiden.dto;
 
+import com.alibaba.fastjson.annotation.JSONField;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -25,6 +27,7 @@ public class TreasureInfoDto {
     private String content;
     @ApiModelProperty("红包金额")
     private BigDecimal amount;
+    @JSONField(format="yyyy-MM-dd HH:mm:ss")
     @ApiModelProperty("结束时间")
     private Date endTime;
     @ApiModelProperty("中奖的概率，百分制,比如100，表示百分百中奖，1表示百分之一")
