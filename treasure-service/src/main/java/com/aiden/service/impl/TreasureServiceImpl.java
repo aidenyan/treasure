@@ -75,6 +75,8 @@ public class TreasureServiceImpl implements TreasureService {
     }
 
     @Override
+
+    @Transactional(rollbackFor = {Exception.class})
     public void updateEndTime(Date endTime) {
         treasureInfoMapper.updateEndTime(endTime);
     }
