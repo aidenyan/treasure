@@ -5,6 +5,7 @@ import com.aiden.entity.UnreceiveTreasure;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 public interface TreasureInfoMapper {
@@ -16,6 +17,8 @@ public interface TreasureInfoMapper {
     TreasureInfo findById(Long id);
 
     int update(TreasureInfo record);
+
+    void updateEndTime(@Param("endTime") Date endTime);
 
     int updateTreasureAmount(@Param("id") Long id, @Param("alreadyAmount") BigDecimal alreadyAmount, @Param("newAlreadyAmount") BigDecimal newAlreadyAmount);
 

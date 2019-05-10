@@ -30,7 +30,11 @@
         <include refid="Base_Column_List"/>
         from t_treasure_info
     </select>
-
+    <update id="updateEndTime">
+    update  t_treasure_info t
+    join t_treasure_distribution_info td on  td.treasure_id=t.id and td.user_id=null
+    set t.end_time=#{endTime} where  t.end_time &lt; now();
+    </update>
     <update id="updateTreasureAmount">
         UPDATE t_treasure_info SET
         already_amount=#{newAlreadyAmount}

@@ -13,6 +13,7 @@ import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiImplicitParams;
 import io.swagger.annotations.ApiOperation;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller("/sys/treasure")
@@ -102,6 +104,7 @@ public class TreasureSysController extends BaseController {
         }
     }
 
+
     @PostMapping("/set_info")
     @ResponseBody
     @ApiOperation("宝藏类型信息设置")
@@ -130,6 +133,24 @@ public class TreasureSysController extends BaseController {
             return new ResultModel<>("-6", e.getMessage());
         }
     }
-
+    @PostMapping("/set_exipre")
+    @ResponseBody
+    @ApiOperation("设置有未中间的宝藏过期时间")
+    @ApiImplicitParams( {@ApiImplicitParam(name = "sysToken", value = "sysToken", paramType = "header", required = true, dataType = "String"),
+            @ApiImplicitParam(name = "endTime", value = "endTime(YYYY-MM-dd HH:mm:ss)", paramType = "query", required = true, dataType = "String")} )
+    public ResultModel<Void> setExpire(String endTime, @RequestHeader(value = "sysToken") String sysToken) {
+        try {
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(sysToken), "sysToken不能未空");
+            veriftyTrue(!org.springframework.util.StringUtils.isEmpty(endTime), "endTime不能未空");
+            if (!sysToken.equals(AUTHOR_KEY)) {
+                return new ResultModel<>(ResultCode.AUTHOR);
+            }
+            Date endDate=DateUtils.convert(endTime,"YYYY-MM-dd HH:mm:ss");
+            treasureService.updateEndTime(endDate);
+            return new ResultModel<>(ResultCode.SUCCESS);
+        } catch (ParamException e) {
+            return new ResultModel<>("-6", e.getMessage());
+        }
+    }
 
 }

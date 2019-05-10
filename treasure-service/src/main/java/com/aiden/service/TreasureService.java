@@ -9,6 +9,7 @@ import com.aiden.entity.UserTreasure;
 import org.apache.ibatis.annotations.Param;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,6 +23,7 @@ public interface TreasureService {
 
     TreasureInfo findTreasureInfo(Long treasureId);
 
+    void updateEndTime( Date endTime);
     List<TreasureInfo> findAll();;
 
     /**

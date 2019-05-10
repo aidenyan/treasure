@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -71,6 +72,11 @@ public class TreasureServiceImpl implements TreasureService {
     public TreasureInfo findTreasureInfo(Long treasureId) {
         Assert.notNull(treasureId, "treasureId is null");
         return treasureInfoMapper.findById(treasureId);
+    }
+
+    @Override
+    public void updateEndTime(Date endTime) {
+        treasureInfoMapper.updateEndTime(endTime);
     }
 
 

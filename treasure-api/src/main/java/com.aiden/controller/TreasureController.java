@@ -240,8 +240,10 @@ public class TreasureController extends BaseController {
             BigDecimal probability = treasureInfo.getProbability();
             probability = probability.multiply(BigDecimal.valueOf(10000));
             boolean isRecieve = RandomUtils.randomReceive(1000000, probability.intValue());
-            treasureService.openTreasure(treasureLevelEnum, treasureDistributionId, user.getId(), isRecieve, sysConfig.getId(), sysConfig.getTreasureAlreadyTotalAmount(),
-                    treasureInfo.getAlreadyAmount(), treasureInfo.getAmount(), alreadyNum);
+            if (isRecieve) {
+                treasureService.openTreasure(treasureLevelEnum, treasureDistributionId, user.getId(), isRecieve, sysConfig.getId(), sysConfig.getTreasureAlreadyTotalAmount(),
+                        treasureInfo.getAlreadyAmount(), treasureInfo.getAmount(), alreadyNum);
+            }
             resultDto.setResult(isRecieve);
             resultDto.setAmount(treasureInfo.getAmount());
             resultDto.setContent(treasureInfo.getContent());
