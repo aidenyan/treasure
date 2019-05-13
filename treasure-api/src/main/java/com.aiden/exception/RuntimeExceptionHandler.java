@@ -19,7 +19,7 @@ public class RuntimeExceptionHandler {
         Map<String,Object> result = new HashMap<>();
         result.put("code", 0);
         if(StringUtils.isEmpty(e.getMessage())){
-            result.put("message", "用户已经在其他地方登录，请重现登录");
+            result.put("message", "用户已经在其他地方登录，请重新登录");
         }else{
             result.put("message",e.getMessage());
         }
