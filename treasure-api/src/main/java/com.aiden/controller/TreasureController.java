@@ -243,6 +243,8 @@ public class TreasureController extends BaseController {
             if (isRecieve) {
                 treasureService.openTreasure(treasureLevelEnum, treasureDistributionId, user.getId(), isRecieve, sysConfig.getId(), sysConfig.getTreasureAlreadyTotalAmount(),
                         treasureInfo.getAlreadyAmount(), treasureInfo.getAmount(), alreadyNum);
+            }else{
+                userService.updateTreasurePoint(user.getId(),-1);
             }
             resultDto.setResult(isRecieve);
             resultDto.setAmount(treasureInfo.getAmount());

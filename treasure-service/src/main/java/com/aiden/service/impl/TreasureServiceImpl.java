@@ -127,6 +127,7 @@ public class TreasureServiceImpl implements TreasureService {
         Assert.notNull(userId);
         Assert.notNull(isReceive);
         int resultInt = treasureDistributionInfoMapper.openTreasure(treasureDistributionId, userId, isReceive);
+        userService.updateTreasurePoint(userId,-1);
         if (resultInt != 1) {
             throw new UpdateException("更新失败处理");
         }
@@ -157,7 +158,7 @@ public class TreasureServiceImpl implements TreasureService {
         cashInfo.setType(BalanceTypeEnum.RED_ENVELOPES.getType());
         cashInfo.setUserId(userId);
         cashInfoService.save(cashInfo);
-        userService.updateTreasurePoint(userId,-1);
+
     }
 
 
